@@ -1,0 +1,96 @@
+import type { Drink } from "../types";
+import { colors } from "./theme";
+
+/** 預設飲品列表 — 對應 PRD 3.1 */
+export const PRESET_DRINKS: ReadonlyArray<Drink> = [
+  {
+    id: "espresso",
+    name: "Espresso",
+    nameZh: "經典濃縮",
+    category: "espresso",
+    color: colors.drink.espresso,
+    hasMilk: false,
+    defaultParams: {
+      temperature: 92,
+      intensity: 4,
+      volume: 40,
+      grindLevel: 3,
+      milkFoam: 0,
+    },
+  },
+  {
+    id: "americano",
+    name: "Americano",
+    nameZh: "美式咖啡",
+    category: "espresso",
+    color: colors.drink.americano,
+    hasMilk: false,
+    defaultParams: {
+      temperature: 90,
+      intensity: 3,
+      volume: 200,
+      grindLevel: 3,
+      milkFoam: 0,
+    },
+  },
+  {
+    id: "latte",
+    name: "Latte",
+    nameZh: "經典拿鐵",
+    category: "milk",
+    color: colors.drink.latte,
+    hasMilk: true,
+    defaultParams: {
+      temperature: 90,
+      intensity: 3,
+      volume: 250,
+      grindLevel: 3,
+      milkFoam: 60,
+    },
+  },
+  {
+    id: "cappuccino",
+    name: "Cappuccino",
+    nameZh: "卡布奇諾",
+    category: "milk",
+    color: colors.drink.cappuccino,
+    hasMilk: true,
+    defaultParams: {
+      temperature: 90,
+      intensity: 3,
+      volume: 200,
+      grindLevel: 3,
+      milkFoam: 80,
+    },
+  },
+  {
+    id: "flat-white",
+    name: "Flat White",
+    nameZh: "澳白咖啡",
+    category: "milk",
+    color: colors.drink.flatWhite,
+    hasMilk: true,
+    defaultParams: {
+      temperature: 90,
+      intensity: 4,
+      volume: 180,
+      grindLevel: 3,
+      milkFoam: 40,
+    },
+  },
+  {
+    id: "mocha",
+    name: "Mocha",
+    nameZh: "摩卡咖啡",
+    category: "specialty",
+    color: colors.drink.mocha,
+    hasMilk: true,
+    defaultParams: {
+      temperature: 88,
+      intensity: 3,
+      volume: 250,
+      grindLevel: 3,
+      milkFoam: 50,
+    },
+  },
+] as const;
