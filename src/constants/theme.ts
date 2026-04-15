@@ -69,7 +69,7 @@ export const tabBar = {
   height: 62,
   pillRadius: 34,
   itemRadius: 26,
-  iconSize: 22,
+  iconSize: 18,
   labelSize: 10,
   padding: { top: 12, right: 21, bottom: 21, left: 21 },
 } as const;
