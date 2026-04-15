@@ -1,0 +1,49 @@
+schema: spec-driven
+
+context: |
+  Project: BrewMaster Pro — smart coffee machine companion app by AlphaCore
+  Domain: IoT / smart home appliance control (espresso machine)
+
+  Tech stack:
+  - Expo 54 + React Native 0.81.5 (New Architecture enabled)
+  - React 19
+  - Expo Router 6 (file-based routing under app/)
+  - NativeWind 4.2 + TailwindCSS 3.4 for styling
+  - Zustand 5 for state management
+  - React Native Reanimated 4 for animations
+  - React Native Gesture Handler 2 for touch interactions
+  - Lucide React Native for icons (strokeWidth 1.5)
+  - TypeScript 5.9 (strict mode)
+
+  Fonts:
+  - Display: Cormorant Garamond (serif, 300/400/500)
+  - Body: Inter (sans-serif, 400/500/600)
+
+  Design system:
+  - Dark luxury theme (bg #1A1A1C, gold accent #C9A962)
+  - Card-based layout with 20px border radius
+  - Content padding 28px horizontal, section gaps 40px
+  - Colors, fonts, spacing tokens in src/constants/theme.ts
+
+  Conventions:
+  - Path aliases: @/* → ./src/*, @/components/*, @/constants/*, @/utils/*, @/stores/*, @/hooks/*
+  - Types use interfaces with readonly fields (no enums, union types instead)
+  - Centralized types in src/types/
+  - Utility: cn() from @/utils/cn (clsx + tailwind-merge)
+  - Commit messages in Chinese (繁體中文) with conventional commit prefixes
+  - PRD available at PRD.md for detailed feature specs
+  - Pencil design file: coffee-app-pencil.pen (use pencil MCP tools only)
+
+  Current screens:
+  - Tabs: Home, Drinks, Recipes, Stats, Settings
+  - Modals: Brew Progress, Schedule, Achievements, Onboarding
+  - Dynamic: Drink detail (/drink/[id])
+
+rules:
+  proposal:
+    - Reference PRD.md sections when the feature is covered there
+    - Keep proposals focused on one capability at a time
+  tasks:
+    - Each task should be completable in a single implementation session
+    - Include file paths where changes are expected
+    - Follow existing patterns in the codebase
