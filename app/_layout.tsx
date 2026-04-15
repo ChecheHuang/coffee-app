@@ -2,6 +2,7 @@ import "../global.css";
 import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   useFonts,
   CormorantGaramond_300Light,
@@ -37,7 +38,7 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -58,6 +59,6 @@ export default function RootLayout() {
         <Stack.Screen name="achievements" />
         <Stack.Screen name="onboarding" />
       </Stack>
-    </>
+    </GestureHandlerRootView>
   );
 }
