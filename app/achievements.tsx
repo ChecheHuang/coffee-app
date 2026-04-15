@@ -1,9 +1,10 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { router } from "expo-router";
 import { ChevronLeft, Trophy, Coffee, Award } from "lucide-react-native";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 /* ── Data ─────────────────────────────────────────────── */
 
@@ -170,25 +171,38 @@ function BadgeItem({
   name: string;
   unlocked: boolean;
 }) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({
+    type: "scale",
+    disabled: !unlocked,
+  });
+
   return (
-    <View
-      className="flex-1 items-center justify-center rounded-[16px] border border-border bg-bg-card"
-      style={{ aspectRatio: 1, opacity: unlocked ? 1 : 0.3 }}
-    >
-      <Trophy
-        size={24}
-        color={unlocked ? "#C9A962" : "#6E6E70"}
-        strokeWidth={1.5}
-      />
-      {name ? (
-        <Text
-          className="font-body-medium text-text-primary"
-          style={{ fontSize: 10, marginTop: 8 }}
-        >
-          {name}
-        </Text>
-      ) : null}
-    </View>
+    <Animated.View className="flex-1" style={animatedStyle}>
+      <Pressable
+        className="flex-1 items-center justify-center rounded-[16px] border border-border bg-bg-card"
+        style={{ aspectRatio: 1, opacity: unlocked ? 1 : 0.3 }}
+        onPress={
+          unlocked
+            ? () => Alert.alert("徽章", `${name}\n恭喜獲得此徽章！`)
+            : undefined
+        }
+        {...pressHandlers}
+      >
+        <Trophy
+          size={24}
+          color={unlocked ? "#C9A962" : "#6E6E70"}
+          strokeWidth={1.5}
+        />
+        {name ? (
+          <Text
+            className="font-body-medium text-text-primary"
+            style={{ fontSize: 10, marginTop: 8 }}
+          >
+            {name}
+          </Text>
+        ) : null}
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -201,34 +215,47 @@ function MilestoneRow({
   date?: string;
   completed: boolean;
 }) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "scale" });
+
   return (
-    <View
-      className="flex-row items-center rounded-[16px] border border-border bg-bg-card"
-      style={{
-        paddingVertical: 14,
-        paddingHorizontal: 20,
-        opacity: completed ? 1 : 0.5,
-      }}
-    >
-      <Coffee
-        size={20}
-        color={completed ? "#C9A962" : "#6E6E70"}
-        strokeWidth={1.5}
-      />
-      <Text
-        className="font-body-medium text-text-primary"
-        style={{ fontSize: 14, marginLeft: 14, flex: 1 }}
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        className="flex-row items-center rounded-[16px] border border-border bg-bg-card"
+        style={{
+          paddingVertical: 14,
+          paddingHorizontal: 20,
+          opacity: completed ? 1 : 0.5,
+        }}
+        onPress={() =>
+          Alert.alert(
+            "里程碑",
+            completed
+              ? `${label}\n達成日期：${date}`
+              : `${label}\n尚未達成，繼續加油！`,
+          )
+        }
+        {...pressHandlers}
       >
-        {label}
-      </Text>
-      {date && (
+        <Coffee
+          size={20}
+          color={completed ? "#C9A962" : "#6E6E70"}
+          strokeWidth={1.5}
+        />
         <Text
-          className="font-body text-text-secondary"
-          style={{ fontSize: 13 }}
+          className="font-body-medium text-text-primary"
+          style={{ fontSize: 14, marginLeft: 14, flex: 1 }}
         >
-          {date}
+          {label}
         </Text>
-      )}
-    </View>
+        {date && (
+          <Text
+            className="font-body text-text-secondary"
+            style={{ fontSize: 13 }}
+          >
+            {date}
+          </Text>
+        )}
+      </Pressable>
+    </Animated.View>
   );
 }

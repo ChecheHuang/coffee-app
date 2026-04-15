@@ -1,8 +1,10 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { Trophy } from "lucide-react-native";
+import { router } from "expo-router";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 const WEEK_DAYS = ["一", "二", "三", "四", "五", "六", "日"];
 const BAR_HEIGHTS = [40, 60, 55, 80, 100, 30, 45];
@@ -113,46 +115,11 @@ export default function StatsScreen() {
             >
               成就
             </Text>
-            <Pressable>
-              <Text className="font-body-medium text-[13px] text-gold">
-                查看全部 →
-              </Text>
-            </Pressable>
+            <ViewAllLink />
           </View>
 
           {/* Achievement Card */}
-          <View
-            className="mt-4 rounded-[20px] border border-border bg-bg-card"
-            style={{ padding: 20 }}
-          >
-            <View className="flex-row items-center" style={{ gap: 8 }}>
-              <Trophy size={20} color="#C9A962" strokeWidth={1.5} />
-              <Text className="font-display-medium text-[18px] text-gold">
-                Lv.3 鑑賞家
-              </Text>
-            </View>
-
-            {/* Progress Bar */}
-            <View
-              className="mt-4 overflow-hidden rounded-[3px] bg-bg-expanded"
-              style={{ height: 6 }}
-            >
-              <LinearGradient
-                colors={["#C9A962", "#8B7845"]}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1, y: 0.5 }}
-                style={{
-                  height: 6,
-                  width: "60%",
-                  borderRadius: 3,
-                }}
-              />
-            </View>
-
-            <Text className="mt-3 font-body text-[12px] text-text-secondary">
-              還差 28 杯升級為「大師」
-            </Text>
-          </View>
+          <AchievementCard />
         </Animated.View>
 
         {/* Badge Row */}
@@ -172,6 +139,66 @@ export default function StatsScreen() {
 
 /* ── Sub-components ────────────────────────────────────── */
 
+function ViewAllLink() {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "opacity" });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        onPress={() => router.push("/achievements")}
+        {...pressHandlers}
+      >
+        <Text className="font-body-medium text-[13px] text-gold">
+          查看全部 →
+        </Text>
+      </Pressable>
+    </Animated.View>
+  );
+}
+
+function AchievementCard() {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "scale" });
+
+  return (
+    <Animated.View style={[{ marginTop: 16 }, animatedStyle]}>
+      <Pressable
+        className="rounded-[20px] border border-border bg-bg-card"
+        style={{ padding: 20 }}
+        onPress={() => router.push("/achievements")}
+        {...pressHandlers}
+      >
+        <View className="flex-row items-center" style={{ gap: 8 }}>
+          <Trophy size={20} color="#C9A962" strokeWidth={1.5} />
+          <Text className="font-display-medium text-[18px] text-gold">
+            Lv.3 鑑賞家
+          </Text>
+        </View>
+
+        {/* Progress Bar */}
+        <View
+          className="mt-4 overflow-hidden rounded-[3px] bg-bg-expanded"
+          style={{ height: 6 }}
+        >
+          <LinearGradient
+            colors={["#C9A962", "#8B7845"]}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={{
+              height: 6,
+              width: "60%",
+              borderRadius: 3,
+            }}
+          />
+        </View>
+
+        <Text className="mt-3 font-body text-[12px] text-text-secondary">
+          還差 28 杯升級為「大師」
+        </Text>
+      </Pressable>
+    </Animated.View>
+  );
+}
+
 function QuickStatCard({
   value,
   suffix,
@@ -183,36 +210,50 @@ function QuickStatCard({
   label: string;
   gold?: boolean;
 }) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "scale" });
+
   return (
-    <View
-      className="flex-1 rounded-[16px] border border-border bg-bg-card"
-      style={{ padding: 16 }}
-    >
-      <Text
-        className={`font-display-medium text-[20px] ${gold ? "text-gold" : "text-text-primary"}`}
+    <Animated.View className="flex-1" style={animatedStyle}>
+      <Pressable
+        className="flex-1 rounded-[16px] border border-border bg-bg-card"
+        style={{ padding: 16 }}
+        onPress={() => Alert.alert("統計詳情", `${label}的詳細資訊即將推出`)}
+        {...pressHandlers}
       >
-        {value}
-        {suffix && (
-          <Text
-            className={`font-display-medium text-[20px] ${gold ? "text-gold" : "text-text-primary"}`}
-          >
-            {suffix}
-          </Text>
-        )}
-      </Text>
-      <Text className="mt-1 font-body text-[11px] text-text-secondary">
-        {label}
-      </Text>
-    </View>
+        <Text
+          className={`font-display-medium text-[20px] ${gold ? "text-gold" : "text-text-primary"}`}
+        >
+          {value}
+          {suffix && (
+            <Text
+              className={`font-display-medium text-[20px] ${gold ? "text-gold" : "text-text-primary"}`}
+            >
+              {suffix}
+            </Text>
+          )}
+        </Text>
+        <Text className="mt-1 font-body text-[11px] text-text-secondary">
+          {label}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }
 
 function BadgePill({ label }: { label: string }) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "opacity" });
+
   return (
-    <View className="rounded-full border border-border bg-bg-card px-4 py-2">
-      <Text className="font-body-medium text-[12px] text-text-primary">
-        {label}
-      </Text>
-    </View>
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        className="rounded-full border border-border bg-bg-card px-4 py-2"
+        onPress={() => router.push("/achievements")}
+        {...pressHandlers}
+      >
+        <Text className="font-body-medium text-[12px] text-text-primary">
+          {label}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }

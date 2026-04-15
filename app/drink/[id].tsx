@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { ChevronLeft, Heart, Coffee } from "lucide-react-native";
@@ -8,6 +8,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withSpring,
   withRepeat,
   withSequence,
   withDelay,
@@ -15,6 +16,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { Slider } from "../../components/Slider";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 const DRINK_DATA: Record<
   string,
@@ -113,6 +115,22 @@ const DEFAULT_DRINK = {
 export default function DrinkDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const drink = DRINK_DATA[id ?? ""] ?? DEFAULT_DRINK;
+  const [isFavorite, setIsFavorite] = useState(false);
+  const heartScale = useSharedValue(1);
+  const heartPress = useAnimatedPress({ type: "opacity" });
+  const savePress = useAnimatedPress({ type: "opacity" });
+
+  const heartBounceStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: heartScale.value }],
+  }));
+
+  const handleFavoriteToggle = () => {
+    setIsFavorite((prev) => !prev);
+    heartScale.value = withSequence(
+      withTiming(1.3, { duration: 150 }),
+      withSpring(1, { damping: 10, stiffness: 200 }),
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-bg-primary">
@@ -127,9 +145,20 @@ export default function DrinkDetailScreen() {
         <Text className="font-display-medium text-xl text-text-primary">
           {drink.name}
         </Text>
-        <Pressable className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card">
-          <Heart size={20} color="#C9A962" strokeWidth={1.5} />
-        </Pressable>
+        <Animated.View style={[heartPress.animatedStyle, heartBounceStyle]}>
+          <Pressable
+            className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card"
+            onPress={handleFavoriteToggle}
+            {...heartPress.pressHandlers}
+          >
+            <Heart
+              size={20}
+              color="#C9A962"
+              strokeWidth={1.5}
+              fill={isFavorite ? "#C9A962" : "none"}
+            />
+          </Pressable>
+        </Animated.View>
       </View>
 
       {/* Scrollable Content */}
@@ -189,11 +218,17 @@ export default function DrinkDetailScreen() {
             </Text>
           </LinearGradient>
         </Pressable>
-        <Pressable className="items-center py-1">
-          <Text className="font-body-medium text-sm text-gold">
-            保存為配方
-          </Text>
-        </Pressable>
+        <Animated.View style={savePress.animatedStyle}>
+          <Pressable
+            className="items-center py-1"
+            onPress={() => Alert.alert("已保存", "配方已保存成功")}
+            {...savePress.pressHandlers}
+          >
+            <Text className="font-body-medium text-sm text-gold">
+              保存為配方
+            </Text>
+          </Pressable>
+        </Animated.View>
       </View>
     </SafeAreaView>
   );

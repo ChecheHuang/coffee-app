@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { View, Text, Pressable, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { ChevronLeft, Plus } from "lucide-react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 /* ── Types ────────────────────────────────────────────── */
 
@@ -40,6 +41,7 @@ const INITIAL_SCHEDULES: ScheduleItem[] = [
 /** Screen 8: 排程管理 (Schedule) */
 export default function ScheduleScreen() {
   const [schedules, setSchedules] = useState<ScheduleItem[]>(INITIAL_SCHEDULES);
+  const addPress = useAnimatedPress({ type: "opacity" });
 
   const toggleSchedule = (id: string) => {
     setSchedules((prev) =>
@@ -60,9 +62,15 @@ export default function ScheduleScreen() {
         <Text className="font-display-medium text-xl text-text-primary">
           排程管理
         </Text>
-        <Pressable className="h-11 w-11 items-center justify-center rounded-full bg-gold">
-          <Plus size={18} color="#1A1A1C" strokeWidth={2} />
-        </Pressable>
+        <Animated.View style={addPress.animatedStyle}>
+          <Pressable
+            className="h-11 w-11 items-center justify-center rounded-full bg-gold"
+            onPress={() => Alert.alert("新增排程", "新增排程功能即將推出")}
+            {...addPress.pressHandlers}
+          >
+            <Plus size={18} color="#1A1A1C" strokeWidth={2} />
+          </Pressable>
+        </Animated.View>
       </View>
 
       {/* 排程卡片列表 */}
@@ -95,6 +103,12 @@ function ScheduleCard({
   index: number;
   onToggle: () => void;
 }) {
+  const [localDays, setLocalDays] = useState(schedule.activeDays);
+
+  const toggleDay = (dayIndex: number) => {
+    setLocalDays((prev) => prev.map((v, i) => (i === dayIndex ? !v : v)));
+  };
+
   return (
     <Animated.View
       entering={FadeInUp.delay(index * 120 + 100)
@@ -125,31 +139,50 @@ function ScheduleCard({
 
         {/* Day circles */}
         <View className="flex-row" style={{ gap: 6 }}>
-          {DAY_LABELS.map((label, i) => {
-            const isActive = schedule.activeDays[i];
-            return (
-              <View
-                key={label}
-                className={`items-center justify-center rounded-full ${
-                  isActive
-                    ? "bg-gold"
-                    : "border border-border"
-                }`}
-                style={{ width: 40, height: 40 }}
-              >
-                <Text
-                  className={`font-body-medium ${
-                    isActive ? "text-bg-primary" : "text-text-secondary"
-                  }`}
-                  style={{ fontSize: 13 }}
-                >
-                  {label}
-                </Text>
-              </View>
-            );
-          })}
+          {DAY_LABELS.map((label, i) => (
+            <DayCircle
+              key={label}
+              label={label}
+              isActive={localDays[i]}
+              onPress={() => toggleDay(i)}
+            />
+          ))}
         </View>
       </View>
+    </Animated.View>
+  );
+}
+
+function DayCircle({
+  label,
+  isActive,
+  onPress,
+}: {
+  label: string;
+  isActive: boolean;
+  onPress: () => void;
+}) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "opacity" });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        className={`items-center justify-center rounded-full ${
+          isActive ? "bg-gold" : "border border-border"
+        }`}
+        style={{ width: 40, height: 40 }}
+        onPress={onPress}
+        {...pressHandlers}
+      >
+        <Text
+          className={`font-body-medium ${
+            isActive ? "text-bg-primary" : "text-text-secondary"
+          }`}
+          style={{ fontSize: 13 }}
+        >
+          {label}
+        </Text>
+      </Pressable>
     </Animated.View>
   );
 }

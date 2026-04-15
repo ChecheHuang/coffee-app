@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import Animated, { FadeInUp } from "react-native-reanimated";
@@ -13,6 +13,7 @@ import {
   Package,
   ChevronRight,
 } from "lucide-react-native";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 type SettingsRowProps = {
   icon: React.ReactNode;
@@ -23,19 +24,24 @@ type SettingsRowProps = {
 };
 
 function SettingsRow({ icon, label, badge, isLast, onPress }: SettingsRowProps) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "scale" });
+
   return (
-    <Pressable
-      className={`flex-row items-center ${!isLast ? "border-b border-border" : ""}`}
-      style={{ paddingVertical: 18, paddingHorizontal: 20, gap: 12 }}
-      onPress={onPress}
-    >
-      {icon}
-      <Text className="flex-1 font-body-medium text-[14px] text-text-primary">
-        {label}
-      </Text>
-      {badge}
-      <ChevronRight size={18} color="#6E6E70" strokeWidth={1.5} />
-    </Pressable>
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        className={`flex-row items-center ${!isLast ? "border-b border-border" : ""}`}
+        style={{ paddingVertical: 18, paddingHorizontal: 20, gap: 12 }}
+        onPress={onPress}
+        {...pressHandlers}
+      >
+        {icon}
+        <Text className="flex-1 font-body-medium text-[14px] text-text-primary">
+          {label}
+        </Text>
+        {badge}
+        <ChevronRight size={18} color="#6E6E70" strokeWidth={1.5} />
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -89,13 +95,13 @@ export default function SettingsScreen() {
             <SettingsRow
               icon={<User size={18} color="#C9A962" strokeWidth={1.5} />}
               label="Bennett"
-              onPress={() => {}}
+              onPress={() => Alert.alert("個人資料", "個人資料頁面即將推出")}
             />
             <SettingsRow
               icon={<Users size={18} color="#6E6E70" strokeWidth={1.5} />}
               label="家庭成員管理"
               isLast
-              onPress={() => {}}
+              onPress={() => Alert.alert("家庭成員", "家庭成員管理即將推出")}
             />
           </SettingsSection>
 
@@ -118,12 +124,12 @@ export default function SettingsScreen() {
                   </Text>
                 </View>
               }
-              onPress={() => {}}
+              onPress={() => Alert.alert("咖啡機資訊", "咖啡機詳細資訊即將推出")}
             />
             <SettingsRow
               icon={<Wifi size={18} color="#6E6E70" strokeWidth={1.5} />}
               label="WiFi 設定"
-              onPress={() => {}}
+              onPress={() => Alert.alert("WiFi 設定", "WiFi 設定頁面即將推出")}
             />
             <SettingsRow
               icon={<RefreshCw size={18} color="#6E6E70" strokeWidth={1.5} />}
@@ -134,7 +140,7 @@ export default function SettingsScreen() {
                 </Text>
               }
               isLast
-              onPress={() => {}}
+              onPress={() => Alert.alert("韌體更新", "已是最新版本")}
             />
           </SettingsSection>
 
@@ -143,18 +149,23 @@ export default function SettingsScreen() {
             <SettingsRow
               icon={<Wrench size={18} color="#C9A962" strokeWidth={1.5} />}
               label="維護中心"
-              onPress={() => {}}
+              onPress={() => Alert.alert("維護中心", "維護中心頁面即將推出")}
             />
             <SettingsRow
               icon={<Droplets size={18} color="#6E6E70" strokeWidth={1.5} />}
               label="引擎式清潔"
-              onPress={() => {}}
+              onPress={() =>
+                Alert.alert("引擎式清潔", "確定要執行清潔程序嗎？", [
+                  { text: "取消", style: "cancel" },
+                  { text: "執行", onPress: () => Alert.alert("清潔中", "清潔程序已啟動") },
+                ])
+              }
             />
             <SettingsRow
               icon={<Package size={18} color="#6E6E70" strokeWidth={1.5} />}
               label="耗材紀錄"
               isLast
-              onPress={() => {}}
+              onPress={() => Alert.alert("耗材紀錄", "耗材紀錄頁面即將推出")}
             />
           </SettingsSection>
 

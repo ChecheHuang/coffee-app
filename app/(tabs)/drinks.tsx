@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Search, Coffee } from "lucide-react-native";
@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
   FadeInUp,
 } from "react-native-reanimated";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 const CATEGORIES = ["全部", "濃縮", "牛奶", "特調", "冰飲"];
 
@@ -25,6 +26,7 @@ const DRINKS = [
 export default function DrinksScreen() {
   const [activeTab, setActiveTab] = useState(0);
   const [tabContainerWidth, setTabContainerWidth] = useState(0);
+  const searchPress = useAnimatedPress({ type: "opacity" });
   const indicatorX = useSharedValue(0);
 
   const tabWidth =
@@ -63,9 +65,15 @@ export default function DrinksScreen() {
           <Text className="font-display text-[36px] text-text-primary">
             飲品
           </Text>
-          <Pressable className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card">
-            <Search size={20} color="#6E6E70" strokeWidth={1.5} />
-          </Pressable>
+          <Animated.View style={searchPress.animatedStyle}>
+            <Pressable
+              className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card"
+              onPress={() => Alert.alert("搜尋", "搜尋功能即將推出")}
+              {...searchPress.pressHandlers}
+            >
+              <Search size={20} color="#6E6E70" strokeWidth={1.5} />
+            </Pressable>
+          </Animated.View>
         </View>
 
         {/* Category Tabs */}

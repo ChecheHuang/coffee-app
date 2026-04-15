@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -20,9 +20,13 @@ import {
   Zap,
   Check,
 } from "lucide-react-native";
+import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 /** Screen 1: 首頁 (Home) — 對應 Pencil 設計稿 */
 export default function HomeScreen() {
+  const bellPress = useAnimatedPress({ type: "opacity" });
+  const machinePress = useAnimatedPress({ type: "scale" });
+
   return (
     <SafeAreaView className="flex-1 bg-bg-primary">
       <ScrollView
@@ -41,9 +45,15 @@ export default function HomeScreen() {
             </Text>
             <ChevronDown size={14} color="#6E6E70" strokeWidth={1.5} />
           </View>
-          <Pressable className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card">
-            <Bell size={20} color="#6E6E70" strokeWidth={1.5} />
-          </Pressable>
+          <Animated.View style={bellPress.animatedStyle}>
+            <Pressable
+              className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card"
+              onPress={() => Alert.alert("通知", "通知功能即將推出")}
+              {...bellPress.pressHandlers}
+            >
+              <Bell size={20} color="#6E6E70" strokeWidth={1.5} />
+            </Pressable>
+          </Animated.View>
         </View>
 
         {/* Greeting */}
@@ -68,12 +78,14 @@ export default function HomeScreen() {
               label="午後時光"
               title="冰拿鐵"
               description="天氣溫暖，適合冰飲"
+              drinkId="latte"
             />
             <SuggestionCard
               icon={<Zap size={18} color="#C9A962" strokeWidth={1.5} />}
               label="提神推薦"
               title="雙份濃縮"
               description="提升專注力的最佳選擇"
+              drinkId="espresso"
             />
           </View>
         </View>
@@ -81,26 +93,32 @@ export default function HomeScreen() {
         {/* Machine Status */}
         <View className="mt-7 px-7">
           <SectionHeader title="機器狀態" />
-          <View className="mt-4 gap-4 rounded-card border border-border bg-bg-card p-5">
-            <View className="flex-row gap-4">
-              <MachineItem label="💧 水箱" value="78%" progress={78} />
-              <MachineItem
-                label="🫘 咖啡豆"
-                value="45%"
-                progress={45}
-                warning
-              />
-            </View>
-            <View className="flex-row gap-4">
-              <MachineItem
-                label="🗑️ 渣盒"
-                value="3/12"
-                progress={25}
-                success
-              />
-              <MachineItem label="✨ 除垢" value="正常" success checkmark />
-            </View>
-          </View>
+          <Animated.View style={machinePress.animatedStyle}>
+            <Pressable
+              className="mt-4 gap-4 rounded-card border border-border bg-bg-card p-5"
+              onPress={() => Alert.alert("機器狀態", "機器詳細狀態即將推出")}
+              {...machinePress.pressHandlers}
+            >
+              <View className="flex-row gap-4">
+                <MachineItem label="💧 水箱" value="78%" progress={78} />
+                <MachineItem
+                  label="🫘 咖啡豆"
+                  value="45%"
+                  progress={45}
+                  warning
+                />
+              </View>
+              <View className="flex-row gap-4">
+                <MachineItem
+                  label="🗑️ 渣盒"
+                  value="3/12"
+                  progress={25}
+                  success
+                />
+                <MachineItem label="✨ 除垢" value="正常" success checkmark />
+              </View>
+            </Pressable>
+          </Animated.View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -226,29 +244,43 @@ function SuggestionCard({
   label,
   title,
   description,
+  drinkId,
 }: {
   icon: React.ReactNode;
   label: string;
   title: string;
   description: string;
+  drinkId?: string;
 }) {
+  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "scale" });
+
   return (
-    <Pressable className="flex-1 gap-2.5 rounded-card border border-border bg-bg-card p-4">
-      <View className="flex-row items-center gap-2">
-        <View className="h-8 w-8 items-center justify-center rounded-2xl bg-bg-expanded">
-          {icon}
+    <Animated.View className="flex-1" style={animatedStyle}>
+      <Pressable
+        className="flex-1 gap-2.5 rounded-card border border-border bg-bg-card p-4"
+        onPress={() => {
+          if (drinkId) {
+            router.push(`/drink/${drinkId}`);
+          }
+        }}
+        {...pressHandlers}
+      >
+        <View className="flex-row items-center gap-2">
+          <View className="h-8 w-8 items-center justify-center rounded-2xl bg-bg-expanded">
+            {icon}
+          </View>
+          <Text className="font-body text-[11px] text-text-secondary">
+            {label}
+          </Text>
         </View>
-        <Text className="font-body text-[11px] text-text-secondary">
-          {label}
+        <Text className="font-display-medium text-xl text-text-primary">
+          {title}
         </Text>
-      </View>
-      <Text className="font-display-medium text-xl text-text-primary">
-        {title}
-      </Text>
-      <Text className="font-body text-[11px] text-text-secondary">
-        {description}
-      </Text>
-    </Pressable>
+        <Text className="font-body text-[11px] text-text-secondary">
+          {description}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }
 
