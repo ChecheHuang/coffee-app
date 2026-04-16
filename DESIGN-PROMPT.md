@@ -51,7 +51,7 @@
     border: 1px #3A3A3C, fill: #242426, padding [4, 4], gap: 0
     - tabItem × 5: frame, vertical, fill_container, fill_container height
       radius 26px, gap 4px, center aligned
-      - icon: lucide icon, 22px
+      - icon: lucide icon, 18px
       - label: Inter 10px, medium 500, uppercase
 
 Tab 列表：

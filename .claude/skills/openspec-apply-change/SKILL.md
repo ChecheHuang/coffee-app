@@ -138,6 +138,34 @@ All tasks complete! Ready to archive this change.
 What would you like to do?
 ```
 
+**Design Consistency Check (UI 任務完成後)**
+
+當一個涉及 UI 變更的任務完成後，執行以下檢查：
+
+1. **設計稿比對提醒**
+   - 若任務涉及頁面佈局、元件樣式、色彩或間距的變更
+   - 在標記任務完成後提醒使用者：
+     ```
+     ✓ Task complete
+     💡 此任務涉及 UI 變更，建議執行 /design-compare 比對設計稿與實際頁面
+     ```
+   - 如果使用者選擇執行，協助觸發 design-compare 流程
+
+2. **Design Token 變更偵測**
+   - 若任務修改了 `tailwind.config.ts` 或 `src/constants/theme.ts` 中的 token
+   - 警告使用者需同步更新其他三處（PRD、DESIGN-PROMPT、.pen）：
+     ```
+     ⚠ 偵測到 Design Token 變更，請確認以下檔案已同步：
+     - PRD.md (Design System 章節)
+     - DESIGN-PROMPT.md (Style Guide Speed Lookup)
+     - coffee-app-pencil.pen (透過 pencil-adjust 更新)
+     ```
+
+3. **新元件/頁面檢查**
+   - 若任務建立了新的頁面檔案（`app/` 下的 .tsx）或重要元件
+   - 檢查 PRD 和 DESIGN-PROMPT 中是否有對應定義
+   - 若缺失，提醒使用者補充
+
 **Guardrails**
 - Keep going through tasks until done or blocked
 - Always read context files before starting (from the apply instructions output)

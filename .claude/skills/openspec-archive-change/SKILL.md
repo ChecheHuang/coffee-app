@@ -50,7 +50,38 @@ Archive a completed change in the experimental workflow.
 
    **If no tasks file exists:** Proceed without task-related warning.
 
-4. **Assess delta spec sync state**
+4. **Consistency Validation Gate（一致性驗證）**
+
+   在歸檔前執行一致性檢查，確認設計與程式碼對齊：
+
+   a. **設計稿 ↔ UI 比對**
+      - 讀取 tasks 檔案中涉及 UI 變更的已完成任務
+      - 識別受影響的頁面路由
+      - 用 **AskUserQuestion** 詢問是否執行 design-compare：
+        - "執行比對（推薦）" — 對受影響頁面執行 `/design-compare`
+        - "跳過比對" — 信任實作品質，直接繼續歸檔
+      - 若執行比對後發現差異，顯示摘要並詢問：
+        - "仍然歸檔" — 接受差異，繼續歸檔
+        - "暫停修復" — 中止歸檔，先修復差異
+
+   b. **Design Token 一致性**
+      - 檢查此 change 是否修改了 `tailwind.config.ts` 或 `src/constants/theme.ts`
+      - 若有修改，比對 PRD 和 DESIGN-PROMPT 中的 token 定義是否已同步
+      - 若有不一致，在 summary 中標註
+
+   c. **資料模型完整性**
+      - 若此 change 涉及資料模型變更，確認 `src/types/` 已更新
+      - 比對 PRD 中的模型定義與 TypeScript 介面
+
+   在歸檔 summary 中加入一致性結果：
+   ```
+   ### Consistency Check
+   - 設計稿 ↔ UI: ✓ 通過 / ⚠ 有差異（已接受）/ ⏭ 已跳過
+   - Design Token: ✓ 一致 / ⚠ N 項需同步
+   - 資料模型: ✓ 一致 / ⚠ N 項需更新 / — 不適用
+   ```
+
+5. **Assess delta spec sync state** (原步驟 4)
 
    Check for delta specs at `openspec/changes/<name>/specs/`. If none exist, proceed without sync prompt.
 
@@ -65,7 +96,7 @@ Archive a completed change in the experimental workflow.
 
    If user chooses sync, use Task tool (subagent_type: "general-purpose", prompt: "Use Skill tool to invoke openspec-sync-specs for change '<name>'. Delta spec analysis: <include the analyzed delta spec summary>"). Proceed to archive regardless of choice.
 
-5. **Perform the archive**
+6. **Perform the archive**
 
    Create the archive directory if it doesn't exist:
    ```bash
@@ -82,7 +113,7 @@ Archive a completed change in the experimental workflow.
    mv openspec/changes/<name> openspec/changes/archive/YYYY-MM-DD-<name>
    ```
 
-6. **Display summary**
+7. **Display summary**
 
    Show archive completion summary including:
    - Change name

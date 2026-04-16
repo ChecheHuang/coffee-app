@@ -236,7 +236,7 @@ App
 │ Status Bar                          │
 ├─────────────────────────────────────┤
 │                                     │
-│  👤 Bennett ▼        🔔  ⚙️         │
+│  👤 Bennett ▼              🔔        │
 │                                     │
 │  Good Morning ☀️                    │
 │  來杯咖啡開始美好的一天              │
@@ -585,7 +585,7 @@ App
 
 | 層級 | 字型 | 大小 | 字重 | 用途 |
 |------|------|------|------|------|
-| Display | Cormorant Garamond | 42px | Regular (400) | 頁面大標題（首頁問候、飲品、統計等） |
+| Display | Cormorant Garamond | 36px | Regular (400) | 頁面大標題（首頁問候、飲品、統計等） |
 | H1 | Cormorant Garamond | 28-32px | Medium (500) | 區塊標題 |
 | H2 | Cormorant Garamond | 20px | Medium (500) | 卡片標題、飲品名 |
 | H3 | Cormorant Garamond | 18px | Medium (500) | 列表項標題 |
@@ -606,7 +606,9 @@ App
 | `spacing-md` | 16px | 標準元素間距 |
 | `spacing-lg` | 24px | 區塊間距 |
 | `spacing-xl` | 32px | 頁面區域間距 |
-| `spacing-2xl` | 48px | 主要區塊分隔 |
+| `spacing-2xl` | 40px | 主要區塊分隔 |
+| `contentPadding` | 28px | 頁面內容水平邊距 |
+| `sectionGap` | 40px | 頁面主要區塊間距 |
 
 ### 6.4 圓角系統
 
@@ -615,7 +617,7 @@ App
 | `radius-sm` | 4px | 進度條、小色塊 |
 | `radius-md` | 16px | 列表項、小型按鈕 |
 | `radius-lg` | 20px | 卡片、按鈕、Pill Tab（標準圓角） |
-| `radius-xl` | 24-26px | 分類 Tab、Tab Bar 內項目 |
+| `radius-xl` | 26px | 分類 Tab、Tab Bar 內項目 |
 | `radius-pill` | 34px | Tab Bar 外框（Pill 造型） |
 | `radius-full` | 9999px | 圓形按鈕、頭像、圖示按鈕 |
 
@@ -663,7 +665,7 @@ App
 - Pill 外框：`#242426`，border `1px #3A3A3C`，radius 34px，height 62px，padding 4px
 - 5 個 Tab：首頁(house) / 飲品(coffee) / 配方(book-open) / 統計(chart-bar) / 設定(settings)
 - Tab Item：fill_container，radius 26px，vertical layout，gap 4px
-  - Icon：Lucide 22px
+  - Icon：Lucide 18px
   - Label：Inter 10px medium 500，uppercase
 - Active 狀態：fill `#C9A962`，icon + label 色 `#1A1A1C`
 - Inactive 狀態：transparent，icon + label 色 `#6E6E70`
@@ -674,7 +676,7 @@ App
 
 ### 7.1 動畫引擎
 
-使用 **React Native Reanimated 3** 作為主要動畫引擎，搭配 **Lottie** 處理複雜向量動畫。
+使用 **React Native Reanimated 4** 作為主要動畫引擎，搭配 **Lottie** 處理複雜向量動畫。
 
 ### 7.2 頁面轉場
 
@@ -751,12 +753,13 @@ App
 
 | 類別 | 技術 | 版本 | 說明 |
 |------|------|------|------|
-| **平台** | Expo | SDK 52+ | 基於 Expo 管理的 React Native 工作流，支援 Expo Go 手機即時預覽 |
-| **框架** | React Native | 0.76+ | 跨平台行動應用框架（由 Expo 管理） |
-| **語言** | TypeScript | 5.x | 型別安全 |
-| **路由** | Expo Router | v4 | 基於檔案的路由系統，整合 React Navigation |
-| **樣式方案** | NativeWind (TailwindCSS) | v4 | Tailwind 的 React Native 實作 |
-| **動畫** | React Native Reanimated | v3 | 高效能原生動畫 |
+| **平台** | Expo | SDK 54 | 基於 Expo 管理的 React Native 工作流，支援 Expo Go 手機即時預覽 |
+| **框架** | React Native | 0.81.5 | 跨平台行動應用框架（New Architecture 啟用） |
+| **UI** | React | 19 | 使用者介面函式庫 |
+| **語言** | TypeScript | 5.9 | 型別安全（strict mode） |
+| **路由** | Expo Router | v6 | 基於檔案的路由系統，整合 React Navigation |
+| **樣式方案** | NativeWind (TailwindCSS) | v4.2 + TailwindCSS 3.4 | Tailwind 的 React Native 實作 |
+| **動畫** | React Native Reanimated | v4 | 高效能原生動畫 |
 | **手勢** | React Native Gesture Handler | v2 | 原生手勢處理 |
 | **向量動畫** | Lottie React Native | latest | 沖煮流程等複雜動畫 |
 | **圖表** | Victory Native | latest | 統計圖表 |
@@ -922,198 +925,68 @@ const BrewButton = ({ isActive }: { isActive: boolean }) => (
 
 ```typescript
 // tailwind.config.ts
-export default {
-  content: ["./src/**/*.{ts,tsx}"],
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
+  presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
-        "bg-primary": "#0D0D14",
-        "bg-secondary": "#1A1A2E",
-        "bg-tertiary": "#252540",
-        "surface": "#2D2D4A",
-        "gold-primary": "#C8A96E",
-        "gold-light": "#E8D5A8",
-        "warm-white": "#F5F0E8",
-        "cool-gray": "#8B8B9E",
-        "muted-gray": "#5A5A72",
-        "success": "#4CAF50",
-        "warning": "#FF9800",
-        "error": "#E53935",
-        "info": "#42A5F5",
-      },
-      borderRadius: {
-        "sm": "8px",
-        "md": "12px",
-        "lg": "16px",
-        "xl": "24px",
-      },
-      spacing: {
-        "xs": "4px",
-        "sm": "8px",
-        "md": "16px",
-        "lg": "24px",
-        "xl": "32px",
-        "2xl": "48px",
+        // 背景層次
+        bg: {
+          primary: "#1A1A1C",
+          card: "#242426",
+          expanded: "#2A2A2C",
+        },
+        // 金色系
+        gold: {
+          DEFAULT: "#C9A962",
+          deep: "#8B7845",
+        },
+        // 文字
+        text: {
+          primary: "#F5F5F0",
+          secondary: "#6E6E70",
+          tertiary: "#4A4A4C",
+        },
+        // 邊框
+        border: {
+          DEFAULT: "#3A3A3C",
+          divider: "#2A2A2C",
+        },
+        // 語意
+        success: "#6E9E6E",
+        warning: "#FF9800",
+        error: "#E53935",
       },
       fontFamily: {
-        "display": ["SF Pro Display", "Roboto", "sans-serif"],
-        "body": ["SF Pro Text", "Roboto", "sans-serif"],
-        "mono": ["SF Mono", "Roboto Mono", "monospace"],
+        display: ["CormorantGaramond_400Regular"],
+        "display-medium": ["CormorantGaramond_500Medium"],
+        "display-light": ["CormorantGaramond_300Light"],
+        body: ["Inter_400Regular"],
+        "body-medium": ["Inter_500Medium"],
+        "body-semibold": ["Inter_600SemiBold"],
+      },
+      borderRadius: {
+        card: "20px",
+        pill: "34px",
       },
     },
   },
   plugins: [],
-}
+};
+
+export default config;
 ```
 
 ---
 
-## 9. 資料模型
-
-### 9.1 用戶 (User)
-
-```typescript
-interface User {
-  readonly id: string
-  readonly name: string
-  readonly avatar: string           // 本地路徑或預設圖示 key
-  readonly createdAt: string        // ISO 8601
-  readonly preferences: UserPreferences
-  readonly level: CoffeeLevel
-  readonly achievements: ReadonlyArray<string>  // achievement IDs
-}
-
-interface UserPreferences {
-  readonly defaultDrink: string     // drink ID
-  readonly temperatureUnit: "celsius" | "fahrenheit"
-  readonly notifications: NotificationSettings
-}
-
-type CoffeeLevel = "beginner" | "enthusiast" | "connoisseur" | "master" | "legend"
-```
-
-### 9.2 飲品 (Drink)
-
-```typescript
-interface Drink {
-  readonly id: string
-  readonly name: string
-  readonly nameZh: string
-  readonly category: DrinkCategory
-  readonly icon: string
-  readonly color: string
-  readonly defaultParams: BrewParams
-  readonly hasMilk: boolean
-}
-
-interface BrewParams {
-  readonly temperature: number      // 85-96°C
-  readonly strength: 1 | 2 | 3 | 4 | 5
-  readonly volume: number           // 25-350ml
-  readonly grindSize: 1 | 2 | 3 | 4 | 5
-  readonly milkFoam: number         // 0-100 (%)
-  readonly preInfusion: boolean
-  readonly preInfusionTime: number  // 秒
-  readonly cups: 1 | 2
-}
-
-type DrinkCategory = "espresso" | "milk" | "specialty" | "iced"
-```
-
-### 9.3 配方 (Recipe)
-
-```typescript
-interface Recipe {
-  readonly id: string
-  readonly userId: string
-  readonly name: string
-  readonly icon: string
-  readonly baseDrinkId: string
-  readonly params: BrewParams
-  readonly isFavorite: boolean
-  readonly createdAt: string
-  readonly lastUsedAt: string | null
-  readonly useCount: number
-}
-```
-
-### 9.4 沖煮紀錄 (BrewRecord)
-
-```typescript
-interface BrewRecord {
-  readonly id: string
-  readonly userId: string
-  readonly drinkId: string
-  readonly recipeId: string | null
-  readonly params: BrewParams
-  readonly startedAt: string
-  readonly completedAt: string | null
-  readonly status: "completed" | "cancelled"
-  readonly rating: number | null    // 1-5
-  readonly caffeineEstimate: number // mg
-}
-```
-
-### 9.5 排程 (Schedule)
-
-```typescript
-interface Schedule {
-  readonly id: string
-  readonly userId: string
-  readonly name: string
-  readonly recipeId: string
-  readonly time: string             // "HH:mm"
-  readonly repeatDays: ReadonlyArray<number>  // 0-6 (日-六)
-  readonly isActive: boolean
-  readonly notifyBefore: number     // 分鐘
-}
-```
-
-### 9.6 咖啡機狀態 (MachineState)
-
-```typescript
-interface MachineState {
-  readonly isConnected: boolean
-  readonly connectionType: "ble" | "wifi" | null
-  readonly waterLevel: number       // 0-100 (%)
-  readonly beanLevel: number        // 0-100 (%)
-  readonly wasteLevel: number       // 已使用次數 / 最大容量
-  readonly wasteMax: number
-  readonly descaleStatus: "ok" | "soon" | "needed"
-  readonly lastDescaleDate: string | null
-  readonly firmwareVersion: string
-  readonly brewingState: BrewingState | null
-}
-
-interface BrewingState {
-  readonly stage: "grinding" | "preinfusion" | "extracting" | "frothing" | "complete"
-  readonly progress: number         // 0-100 (%)
-  readonly estimatedRemaining: number // 秒
-}
-```
-
-### 9.7 成就 (Achievement)
-
-```typescript
-interface Achievement {
-  readonly id: string
-  readonly name: string
-  readonly description: string
-  readonly icon: string
-  readonly category: "milestone" | "exploration" | "streak" | "skill"
-  readonly condition: AchievementCondition
-}
-
-interface UserAchievement {
-  readonly achievementId: string
-  readonly unlockedAt: string
-  readonly progress: number         // 0-100 (%)
-}
-```
-
----
-
-## 10. 未來擴展規劃
+## 9. 未來擴展規劃
 
 ### Phase 2（計劃中）
 - 社群配方廣場：瀏覽/分享/評分用戶配方

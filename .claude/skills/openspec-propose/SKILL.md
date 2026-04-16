@@ -47,39 +47,72 @@ When ready to implement, run /opsx:apply
    - `applyRequires`: array of artifact IDs needed before implementation (e.g., `["tasks"]`)
    - `artifacts`: list of all artifacts with their status and dependencies
 
-4. **Create artifacts in sequence until apply-ready**
+4. **Create proposal artifact**
 
-   Use the **TodoWrite tool** to track progress through the artifacts.
+   Create the first artifact (proposal — the one with no pending dependencies):
 
-   Loop through artifacts in dependency order (artifacts with no pending dependencies first):
+   a. Run `openspec status --change "<name>" --json` to find `ready` artifacts
+   b. Get instructions:
+      ```bash
+      openspec instructions <artifact-id> --change "<name>" --json
+      ```
+   c. The instructions JSON includes:
+      - `context`: Project background (constraints for you - do NOT include in output)
+      - `rules`: Artifact-specific rules (constraints for you - do NOT include in output)
+      - `template`: The structure to use for your output file
+      - `instruction`: Schema-specific guidance for this artifact type
+      - `outputPath`: Where to write the artifact
+      - `dependencies`: Completed artifacts to read for context
+   d. Read dependency files, create the artifact using `template`
+   e. Apply `context` and `rules` as constraints — do NOT copy them into the file
+   f. Show: "Created proposal"
+   g. If artifact requires user input → use **AskUserQuestion** to clarify
 
-   a. **For each artifact that is `ready` (dependencies satisfied)**:
-      - Get instructions:
-        ```bash
-        openspec instructions <artifact-id> --change "<name>" --json
-        ```
-      - The instructions JSON includes:
-        - `context`: Project background (constraints for you - do NOT include in output)
-        - `rules`: Artifact-specific rules (constraints for you - do NOT include in output)
-        - `template`: The structure to use for your output file
-        - `instruction`: Schema-specific guidance for this artifact type
-        - `outputPath`: Where to write the artifact
-        - `dependencies`: Completed artifacts to read for context
-      - Read any completed dependency files for context
-      - Create the artifact file using `template` as the structure
-      - Apply `context` and `rules` as constraints - but do NOT copy them into the file
-      - Show brief progress: "Created <artifact-id>"
+5. **Upstream Design Production（上游設計產出）**
 
-   b. **Continue until all `applyRequires` artifacts are complete**
-      - After creating each artifact, re-run `openspec status --change "<name>" --json`
-      - Check if every artifact ID in `applyRequires` has `status: "done"` in the artifacts array
-      - Stop when all `applyRequires` artifacts are done
+   After proposal establishes scope, ensure PRD → Pencil → DESIGN-PROMPT are complete **before** generating remaining artifacts (design.md, tasks.md). This guarantees tasks are based on complete specs.
 
-   c. **If an artifact requires user input** (unclear context):
-      - Use **AskUserQuestion tool** to clarify
-      - Then continue with creation
+   a. **PRD 差量更新**
+      - Read `PRD.md` sections related to the proposed change
+      - Identify gaps: new pages, features, data models, or UI flows not yet defined in PRD
+      - If gaps found:
+        - Ask via **AskUserQuestion**: "PRD 尚未定義以下內容，是否現在補充？" + gap list
+        - If yes → edit `PRD.md` to add missing definitions (follow existing PRD structure)
+        - If deferred → note as prerequisite in design.md
+      - If no gaps → proceed
 
-5. **Show final status**
+   b. **Pencil 設計產出**
+      - Open `coffee-app-pencil.pen` via `mcp__pencil__open_document`
+      - Search existing designs for affected screens via `mcp__pencil__batch_get`
+      - If screens lack Pencil designs:
+        - Ask via **AskUserQuestion**: "以下畫面尚無 Pencil 設計，是否現在建立？" + screen list
+        - If yes → load `get_guidelines` + `get_variables`, use `batch_design` to create designs following the design system
+        - If deferred → note as prerequisite
+      - If designs exist → verify they cover the proposed changes, flag outdated areas
+
+   c. **DESIGN-PROMPT.md 同步**
+      - If Pencil designs were created/updated in step b, update `DESIGN-PROMPT.md` Screen Blueprints
+      - Add new screen entries or update existing ones to match Pencil designs
+      - Keep blueprint format consistent with existing entries
+      - If no Pencil changes → skip
+
+   Show upstream production summary before proceeding.
+
+6. **Create remaining artifacts**
+
+   Continue creating artifacts (design.md, tasks.md) in dependency order:
+
+   a. Re-run `openspec status --change "<name>" --json`
+   b. For each `ready` artifact:
+      - Get instructions via `openspec instructions <artifact-id> --change "<name>" --json`
+      - Read dependency files for context
+      - Create the artifact using `template`, applying `context` and `rules` as constraints
+      - **IMPORTANT**: Reference updated PRD, Pencil designs, and DESIGN-PROMPT as implementation context
+      - Show: "Created <artifact-id>"
+   c. After each artifact, re-check status until all `applyRequires` are `done`
+   d. If an artifact requires user input → use **AskUserQuestion** to clarify
+
+7. **Show final status**
    ```bash
    openspec status --change "<name>"
    ```
@@ -88,7 +121,9 @@ When ready to implement, run /opsx:apply
 
 After completing all artifacts, summarize:
 - Change name and location
+- **Upstream production**: PRD updates applied, Pencil designs created/verified, DESIGN-PROMPT synced (or deferred items)
 - List of artifacts created with brief descriptions
+- Consistency validation results
 - What's ready: "All artifacts created! Ready for implementation."
 - Prompt: "Run `/opsx:apply` or ask me to implement to start working on the tasks."
 
@@ -101,6 +136,31 @@ After completing all artifacts, summarize:
 - **IMPORTANT**: `context` and `rules` are constraints for YOU, not content for the file
   - Do NOT copy `<context>`, `<rules>`, `<project_context>` blocks into the artifact
   - These guide what you write, but should never appear in the output
+
+**Consistency Validation（一致性驗證 — 上游產出後的最終確認）**
+
+步驟 5 的 Upstream Design Production 已主動處理大部分缺失。此步驟為最終驗證，確認無遺漏：
+
+1. **PRD ↔ 設計稿覆蓋度**
+   - 確認 PRD 定義的頁面/元件在 `DESIGN-PROMPT.md` 和 Pencil 設計中都有對應
+   - 若仍有缺失（步驟 5 中被 deferred 的項目），列出並標註
+
+2. **Design Token 四源同步**
+   - 檢查四處 token 是否一致：`PRD.md`、`DESIGN-PROMPT.md`、`tailwind.config.ts`、`coffee-app-pencil.pen`（via `mcp__pencil__get_variables`）
+   - 若有不一致，標註需同步的項目
+
+3. **資料模型 ↔ TypeScript 型別**
+   - 若涉及資料模型變更，比對 PRD 定義與 `src/types/` 的 TypeScript 介面
+   - 若有差異，列出需更新的型別檔案
+
+在 summary 中加入驗證結果：
+```
+### Consistency Validation
+- PRD ↔ 設計稿: ✓ 通過 / ⚠ N 項 deferred
+- Design Token: ✓ 一致 / ⚠ N 項需同步
+- 資料模型 ↔ 型別: ✓ 一致 / ⚠ N 項需更新
+- Upstream Production: ✓ PRD 已更新 / ✓ Pencil 已建立 / ⏭ 已跳過
+```
 
 **Guardrails**
 - Create ALL artifacts needed for implementation (as defined by schema's `apply.requires`)
