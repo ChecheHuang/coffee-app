@@ -5,6 +5,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import {
   User,
   Users,
+  Clock,
   Coffee,
   Wifi,
   RefreshCw,
@@ -61,7 +62,7 @@ function SettingsSection({ title, children, index }: SectionProps) {
     >
       <Text
         className="font-body-medium text-[11px] text-text-secondary"
-        style={{ marginBottom: 10 }}
+        style={{ marginBottom: 10, letterSpacing: 3 }}
       >
         {title}
       </Text>
@@ -89,7 +90,7 @@ export default function SettingsScreen() {
         </View>
 
         {/* Sections */}
-        <View className="px-7" style={{ marginTop: 20, gap: 20 }}>
+        <View className="px-7" style={{ marginTop: 20, gap: 28 }}>
           {/* 用戶 */}
           <SettingsSection title="用戶" index={0}>
             <SettingsRow
@@ -144,8 +145,18 @@ export default function SettingsScreen() {
             />
           </SettingsSection>
 
+          {/* 排程 */}
+          <SettingsSection title="排程" index={2}>
+            <SettingsRow
+              icon={<Clock size={18} color="#C9A962" strokeWidth={1.5} />}
+              label="排程管理"
+              isLast
+              onPress={() => router.push("/schedule")}
+            />
+          </SettingsSection>
+
           {/* 維護 */}
-          <SettingsSection title="維護" index={2}>
+          <SettingsSection title="維護" index={3}>
             <SettingsRow
               icon={<Wrench size={18} color="#C9A962" strokeWidth={1.5} />}
               label="維護中心"
@@ -153,9 +164,9 @@ export default function SettingsScreen() {
             />
             <SettingsRow
               icon={<Droplets size={18} color="#6E6E70" strokeWidth={1.5} />}
-              label="引擎式清潔"
+              label="引導式清潔"
               onPress={() =>
-                Alert.alert("引擎式清潔", "確定要執行清潔程序嗎？", [
+                Alert.alert("引導式清潔", "確定要執行清潔程序嗎？", [
                   { text: "取消", style: "cancel" },
                   { text: "執行", onPress: () => Alert.alert("清潔中", "清潔程序已啟動") },
                 ])
@@ -171,12 +182,15 @@ export default function SettingsScreen() {
 
           {/* 其他 */}
           <Animated.View
-            entering={FadeInUp.delay(300)
+            entering={FadeInUp.delay(400)
               .springify()
               .damping(20)
               .stiffness(150)}
           >
-            <Text className="font-body-medium text-[11px] text-text-secondary">
+            <Text
+              className="font-body-medium text-[11px] text-text-secondary"
+              style={{ letterSpacing: 3 }}
+            >
               其他
             </Text>
           </Animated.View>

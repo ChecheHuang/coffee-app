@@ -912,6 +912,124 @@ Bottom Bar: 無
 
 ---
 
+## Screen 13 — Onboarding 2: 搜尋配對咖啡機
+
+**Pencil node ID:** `hCVEB`
+**尺寸:** 402 × 874px
+**背景:** #1A1A1C
+
+### 13.1 StatusBar
+- 同其他 Screen（Inter 15px 600 #F5F5F0 + signal/wifi/battery icons）
+
+### 13.2 Content
+- frame vertical, fill_container, justify center, align center, padding [0, 28, 34, 28], gap 40px
+
+#### 13.2.1 Brand Area
+- frame vertical, align center, gap 16px
+  - Glow frame (140×140, layout none):
+    - Outer glow: ellipse 140×140, radial gradient #C9A96225 → #C9A96200
+    - Gold circle: ellipse 100×100 at (20,20), linear gradient 135° #C9A962 → #8B7845
+    - Icon: lucide "wifi" 44×44 at (48,48), fill #1A1A1C
+  - "搜尋附近的咖啡機" — Cormorant Garamond 24px normal #F5F5F0
+  - "請確認咖啡機已開啟" — Inter 16px normal #6E6E70
+
+#### 13.2.2 Device List
+- frame vertical, gap 16px
+  - Row 1: dot 8×8 #6E9E6E (sage green) + "BrewMaster Pro" Inter 14px normal #F5F5F0, gap 12
+  - Row 2: dot 8×8 #6E9E6E + "信號強度：良好" Inter 14px normal #6E6E70, gap 12
+  - Row 3: dot 8×8 #4A4A4C + "BrewMaster Mini" Inter 14px normal #6E6E70, gap 12
+
+#### 13.2.3 Step Indicator
+- frame horizontal, align center, gap 8px
+  - dot 1: ellipse 8×8 #3A3A3C
+  - dot 2: rectangle 24×8 cornerRadius 4 #C9A962 (active, elongated)
+  - dot 3: ellipse 8×8 #3A3A3C
+  - dot 4: ellipse 8×8 #3A3A3C
+
+#### 13.2.4 CTA
+- Button/Primary instance, fill_container, height 56px
+  - "連線" — Inter 16px semibold 600 #1A1A1C
+
+---
+
+## Screen 14 — Onboarding 3: 建立個人檔案
+
+**Pencil node ID:** `l7CVp`
+**尺寸:** 402 × 874px
+**背景:** #1A1A1C
+
+### 14.1 StatusBar
+- 同 Screen 13
+
+### 14.2 Content
+- frame vertical, fill_container, justify center, align center, padding [0, 28, 34, 28], gap 40px
+
+#### 14.2.1 Brand Area
+- frame vertical, align center, gap 16px
+  - Glow frame 同 Screen 13 結構
+    - Icon: lucide "user" 44×44 at (48,48), fill #1A1A1C
+  - "建立個人檔案" — Cormorant Garamond 24px normal #F5F5F0
+  - "讓我們更了解你的喜好" — Inter 16px normal #6E6E70
+
+#### 14.2.2 Form Fields
+- frame vertical, gap 16px
+  - Row 1: dot 8×8 #C9A962 + "暱稱輸入" Inter 14px normal #F5F5F0, gap 12
+  - Row 2: dot 8×8 #C9A962 + "口味偏好" Inter 14px normal #F5F5F0, gap 12
+  - Row 3: "偏濃  ●  適中  ○  偏淡  ○" Inter 14px normal #F5F5F0
+    - Active indicator: filled circle #C9A962
+    - Inactive indicator: outline circle #6E6E70
+
+#### 14.2.3 Step Indicator
+- frame horizontal, align center, gap 8px
+  - dot 1: ellipse 8×8 #3A3A3C
+  - dot 2: ellipse 8×8 #3A3A3C
+  - dot 3: rectangle 24×8 cornerRadius 4 #C9A962 (active)
+  - dot 4: ellipse 8×8 #3A3A3C
+
+#### 14.2.4 CTA
+- Button/Primary instance, fill_container, height 56px
+  - "下一步" — Inter 16px semibold 600 #1A1A1C
+
+---
+
+## Screen 15 — Onboarding 4: 選擇第一杯
+
+**Pencil node ID:** `suJ8Y`
+**尺寸:** 402 × 874px
+**背景:** #1A1A1C
+
+### 15.1 StatusBar
+- 同 Screen 13
+
+### 15.2 Content
+- frame vertical, fill_container, justify center, align center, padding [0, 28, 34, 28], gap 40px
+
+#### 15.2.1 Brand Area
+- frame vertical, align center, gap 16px
+  - Glow frame 同 Screen 13 結構
+    - Icon: lucide "coffee" 44×44 at (48,48), fill #1A1A1C
+  - "選擇你的第一杯" — Cormorant Garamond 24px normal #F5F5F0
+  - "可以之後在飲品頁變更" — Inter 16px normal #6E6E70
+
+#### 15.2.2 Drink Selection
+- frame vertical, gap 16px
+  - Row 1: dot 8×8 #C9A962 + "Espresso    Latte    Cappuccino" Inter 14px #F5F5F0, gap 12
+  - Row 2: dot 8×8 #C9A962 + "Americano    Mocha    Flat White" Inter 14px #F5F5F0, gap 12
+  - 實作時改為 Pill 元件 flexWrap 排列
+
+#### 15.2.3 Step Indicator
+- frame horizontal, align center, gap 8px
+  - dot 1: ellipse 8×8 #3A3A3C
+  - dot 2: ellipse 8×8 #3A3A3C
+  - dot 3: ellipse 8×8 #3A3A3C
+  - dot 4: rectangle 24×8 cornerRadius 4 #C9A962 (active)
+
+#### 15.2.4 CTA
+- Button/Primary instance, fill_container, height 56px
+  - "開始使用" — Inter 16px semibold 600 #1A1A1C
+
+---
+
 ## 執行順序建議
 
 Pencil 繪製時建議按以下順序，每次 `batch_design` 控制在 25 個 operation 以內：

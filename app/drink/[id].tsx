@@ -116,6 +116,9 @@ export default function DrinkDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const drink = DRINK_DATA[id ?? ""] ?? DEFAULT_DRINK;
   const [isFavorite, setIsFavorite] = useState(false);
+  const [preInfusion, setPreInfusion] = useState(false);
+  const [cupCount, setCupCount] = useState<"single" | "double">("single");
+  const togglePosition = useSharedValue(0);
   const heartScale = useSharedValue(1);
   const heartPress = useAnimatedPress({ type: "opacity" });
   const savePress = useAnimatedPress({ type: "opacity" });
@@ -123,6 +126,16 @@ export default function DrinkDetailScreen() {
   const heartBounceStyle = useAnimatedStyle(() => ({
     transform: [{ scale: heartScale.value }],
   }));
+
+  const toggleAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: togglePosition.value }],
+  }));
+
+  const handleTogglePreInfusion = () => {
+    const next = !preInfusion;
+    setPreInfusion(next);
+    togglePosition.value = withTiming(next ? 20 : 0, { duration: 300 });
+  };
 
   const handleFavoriteToggle = () => {
     setIsFavorite((prev) => !prev);
@@ -195,6 +208,105 @@ export default function DrinkDetailScreen() {
             </Animated.View>
           ))}
         </View>
+
+        {/* Advanced Options */}
+        <Animated.View
+          className="gap-4 px-7"
+          style={{ marginTop: 24 }}
+          entering={FadeInUp.delay(drink.params.length * 80 + 80)
+            .springify()
+            .damping(20)
+            .stiffness(150)}
+        >
+          <Text
+            className="font-body-medium text-[11px] uppercase text-text-secondary"
+            style={{ letterSpacing: 3 }}
+          >
+            進階選項
+          </Text>
+
+          {/* 預浸泡 */}
+          <View className="flex-row items-center justify-between">
+            <Text className="font-body-medium text-[14px] text-text-primary">
+              預浸泡
+            </Text>
+            <View className="flex-row items-center gap-2">
+              <Pressable
+                onPress={handleTogglePreInfusion}
+                style={{
+                  width: 48,
+                  height: 28,
+                  borderRadius: 14,
+                  backgroundColor: preInfusion ? "#C9A962" : "#3A3A3C",
+                  justifyContent: "center",
+                  paddingHorizontal: 4,
+                }}
+              >
+                <Animated.View
+                  style={[
+                    {
+                      width: 20,
+                      height: 20,
+                      borderRadius: 10,
+                      backgroundColor: "#FFFFFF",
+                    },
+                    toggleAnimatedStyle,
+                  ]}
+                />
+              </Pressable>
+              {preInfusion && (
+                <Text className="font-body-medium text-[13px] text-gold">
+                  3 秒
+                </Text>
+              )}
+            </View>
+          </View>
+
+          {/* 杯數 */}
+          <View className="flex-row items-center justify-between">
+            <Text className="font-body-medium text-[14px] text-text-primary">
+              杯數
+            </Text>
+            <View className="flex-row gap-2">
+              <Pressable
+                onPress={() => setCupCount("single")}
+                className={`rounded-[20px] px-4 py-2 ${
+                  cupCount === "single"
+                    ? "bg-gold"
+                    : "border border-border bg-bg-card"
+                }`}
+              >
+                <Text
+                  className={`font-body-medium text-[13px] ${
+                    cupCount === "single"
+                      ? "text-bg-primary"
+                      : "text-text-secondary"
+                  }`}
+                >
+                  單杯
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setCupCount("double")}
+                className={`rounded-[20px] px-4 py-2 ${
+                  cupCount === "double"
+                    ? "bg-gold"
+                    : "border border-border bg-bg-card"
+                }`}
+              >
+                <Text
+                  className={`font-body-medium text-[13px] ${
+                    cupCount === "double"
+                      ? "text-bg-primary"
+                      : "text-text-secondary"
+                  }`}
+                >
+                  雙杯
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </Animated.View>
       </ScrollView>
 
       {/* Bottom CTA */}
