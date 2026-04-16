@@ -1,7 +1,15 @@
 /**
  * inspect.mjs — Extract DOM structure and computed styles via Puppeteer
- * Usage: node inspect.mjs <url> [output.json] [--close]
+ * Usage: node inspect.mjs <url> [output.json] [--close] [--port=9222]
  *   --close  Close browser after extraction (default: keep open for review)
+ *   --port=N Remote debugging port for reusing an existing Chrome (default: 9222)
+ *
+ * Behavior:
+ *   1. Try to connect to Chrome on the debugging port
+ *      - If same URL → reload
+ *      - If different URL → navigate
+ *   2. If no Chrome is running → launch a new one with the debugging port
+ *
  * Requires: npm install --save-dev puppeteer-core
  */
 
@@ -44,15 +52,11 @@ const positional = args.filter((a) => !a.startsWith('--'));
 const url = positional[0];
 const outputPath = positional[1] || 'elements.json';
 const autoClose = flags.includes('--close');
+const portFlag = flags.find((f) => f.startsWith('--port='));
+const debugPort = portFlag ? parseInt(portFlag.split('=')[1], 10) : 9222;
 
 if (!url) {
-  console.error('Usage: node inspect.mjs <url> [output.json] [--close]');
-  process.exit(1);
-}
-
-const executablePath = findChrome();
-if (!executablePath) {
-  console.error('Chrome not found. Install Chrome or set CHROME_PATH env variable.');
+  console.error('Usage: node inspect.mjs <url> [output.json] [--close] [--port=N]');
   process.exit(1);
 }
 
@@ -61,26 +65,87 @@ if (outputDir && outputDir !== '.' && !existsSync(outputDir)) {
   mkdirSync(outputDir, { recursive: true });
 }
 
-console.log(`Chrome: ${executablePath}`);
-console.log(`URL: ${url}`);
-console.log(`Viewport: ${VIEWPORT.width}x${VIEWPORT.height} @${VIEWPORT.deviceScaleFactor}x`);
+/**
+ * Try to connect to an already-running Chrome on the debugging port.
+ * Returns { browser, page, reused: true } or null.
+ */
+async function tryConnect() {
+  try {
+    const resp = await fetch(`http://127.0.0.1:${debugPort}/json/version`);
+    const { webSocketDebuggerUrl } = await resp.json();
+    if (!webSocketDebuggerUrl) return null;
 
-const browser = await puppeteer.launch({
-  executablePath,
-  headless: false,
-  defaultViewport: null,
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-gpu',
-    `--window-size=${WINDOW_WIDTH},${WINDOW_HEIGHT}`,
-  ],
-});
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: webSocketDebuggerUrl,
+      defaultViewport: null,
+    });
 
-try {
+    // Find an existing page or create one
+    const pages = await browser.pages();
+    const page = pages.length > 0 ? pages[0] : await browser.newPage();
+    await page.setViewport(VIEWPORT);
+
+    const currentUrl = page.url();
+    const targetNorm = new URL(url).href;
+    const currentNorm = (() => {
+      try { return new URL(currentUrl).href; } catch { return ''; }
+    })();
+
+    if (currentNorm === targetNorm) {
+      console.log(`Reusing Chrome (port ${debugPort}) — reloading same URL`);
+      await page.reload({ waitUntil: 'networkidle0', timeout: 30000 });
+    } else {
+      console.log(`Reusing Chrome (port ${debugPort}) — navigating to new URL`);
+      await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+    }
+
+    return { browser, page, reused: true };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Launch a fresh Chrome with the debugging port enabled.
+ */
+async function launchNew() {
+  const executablePath = findChrome();
+  if (!executablePath) {
+    console.error('Chrome not found. Install Chrome or set CHROME_PATH env variable.');
+    process.exit(1);
+  }
+  console.log(`Launching new Chrome (port ${debugPort})`);
+  console.log(`Chrome: ${executablePath}`);
+
+  const browser = await puppeteer.launch({
+    executablePath,
+    headless: false,
+    defaultViewport: null,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      `--window-size=${WINDOW_WIDTH},${WINDOW_HEIGHT}`,
+      `--remote-debugging-port=${debugPort}`,
+    ],
+  });
+
   const page = await browser.newPage();
   await page.setViewport(VIEWPORT);
   await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+
+  return { browser, page, reused: false };
+}
+
+// --- Main ---
+
+console.log(`URL: ${url}`);
+console.log(`Viewport: ${VIEWPORT.width}x${VIEWPORT.height} @${VIEWPORT.deviceScaleFactor}x`);
+
+const conn = (await tryConnect()) || (await launchNew());
+const { browser, page, reused } = conn;
+
+try {
   // Wait for animations and dynamic content to settle
   await new Promise((r) => setTimeout(r, 2000));
 
@@ -282,6 +347,7 @@ try {
     url,
     viewport: { width: VIEWPORT.width, height: VIEWPORT.height },
     extractedAt: new Date().toISOString(),
+    reusedBrowser: reused,
     tree: elements,
   };
 
@@ -292,13 +358,17 @@ try {
 
   if (autoClose) {
     await browser.close();
-    console.log('Done.');
+    console.log('Done (browser closed).');
+  } else if (reused) {
+    // Reused browser — disconnect without closing
+    browser.disconnect();
+    console.log('Done (browser stays open, disconnected).');
   } else {
     console.log('Browser kept open for manual review. Press Ctrl+C to close.');
     await new Promise(() => {});
   }
 } catch (err) {
   console.error(`Inspection failed: ${err.message}`);
-  await browser.close();
+  if (!reused) await browser.close();
   process.exit(1);
 }

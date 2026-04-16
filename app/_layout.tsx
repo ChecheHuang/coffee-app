@@ -55,6 +55,8 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
           }}
         />
+        <Stack.Screen name="recipe/[id]" />
+        <Stack.Screen name="recipe/edit" />
         <Stack.Screen name="schedule" />
         <Stack.Screen name="achievements" />
         <Stack.Screen name="onboarding" />

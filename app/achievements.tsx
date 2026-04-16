@@ -3,20 +3,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { router } from "expo-router";
-import { ChevronLeft, Trophy, Coffee, Award } from "lucide-react-native";
+import { ChevronLeft, Lock, CheckCircle, Circle } from "lucide-react-native";
 import { useAnimatedPress } from "@/hooks/useAnimatedPress";
+import { cn } from "@/utils/cn";
 
 /* ── Data ─────────────────────────────────────────────── */
 
 const BADGES: { name: string; unlocked: boolean }[] = [
-  { name: "初次達人", unlocked: true },
+  { name: "奶泡達人", unlocked: true },
   { name: "早鳥族", unlocked: true },
-  { name: "茶杯保修", unlocked: true },
-  { name: "純料主義", unlocked: true },
-  { name: "", unlocked: false },
-  { name: "", unlocked: false },
-  { name: "", unlocked: false },
-  { name: "", unlocked: false },
+  { name: "百杯俱樂部", unlocked: true },
+  { name: "純粹主義", unlocked: true },
+  { name: "溫度敏感", unlocked: false },
+  { name: "千杯傳奇", unlocked: false },
+  { name: "參數大師", unlocked: false },
+  { name: "連續30天", unlocked: false },
 ];
 
 const MILESTONES: {
@@ -24,9 +25,10 @@ const MILESTONES: {
   date?: string;
   completed: boolean;
 }[] = [
-  { label: "第 1 杯咖啡", date: "2026-07-15", completed: true },
+  { label: "第 1 杯咖啡", date: "2026-01-15", completed: true },
   { label: "累計 100 杯", date: "2026-03-22", completed: true },
   { label: "累計 500 杯", completed: false },
+  { label: "連續 30 天每天沖煮", completed: false },
 ];
 
 /** Screen 9: 成就與徽章 (Achievements) */
@@ -63,17 +65,17 @@ export default function AchievementsScreen() {
             colors={["#C9A962", "#8B7845"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={{ borderRadius: 20, padding: 24 }}
+            style={{ borderRadius: 20, padding: 24, gap: 12 }}
           >
             <Text
               className="font-display-light"
-              style={{ fontSize: 52, color: "#1A1A1C" }}
+              style={{ fontSize: 52, color: "#1A1A1C", lineHeight: 52 * 0.85 }}
             >
               Lv.3
             </Text>
             <Text
               className="font-display-medium"
-              style={{ fontSize: 20, color: "#1A1A1C", marginTop: 4 }}
+              style={{ fontSize: 20, color: "#1A1A1C" }}
             >
               鑑賞家
             </Text>
@@ -81,16 +83,15 @@ export default function AchievementsScreen() {
             {/* Progress Bar */}
             <View
               style={{
-                height: 6,
-                borderRadius: 3,
-                backgroundColor: "rgba(0,0,0,0.2)",
-                marginTop: 20,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: "rgba(26,26,28,0.19)",
               }}
             >
               <View
                 style={{
-                  height: 6,
-                  borderRadius: 3,
+                  height: 8,
+                  borderRadius: 4,
                   backgroundColor: "#1A1A1C",
                   width: "60%",
                 }}
@@ -99,7 +100,7 @@ export default function AchievementsScreen() {
 
             <Text
               className="font-body-medium"
-              style={{ fontSize: 13, color: "#1A1A1C", marginTop: 12 }}
+              style={{ fontSize: 13, color: "#1A1A1C", opacity: 0.7 }}
             >
               還差 28 杯升級為「大師」
             </Text>
@@ -113,7 +114,7 @@ export default function AchievementsScreen() {
         >
           <Text
             className="font-body-medium text-[11px] text-text-secondary"
-            style={{ letterSpacing: 1 }}
+            style={{ letterSpacing: 3 }}
           >
             已獲得徽章 (8/24)
           </Text>
@@ -141,12 +142,12 @@ export default function AchievementsScreen() {
         >
           <Text
             className="font-body-medium text-[11px] text-text-secondary"
-            style={{ letterSpacing: 1 }}
+            style={{ letterSpacing: 3 }}
           >
             里程碑
           </Text>
 
-          <View style={{ marginTop: 12, gap: 12 }}>
+          <View style={{ marginTop: 12, gap: 8 }}>
             {MILESTONES.map((m, i) => (
               <MilestoneRow
                 key={i}
@@ -179,8 +180,15 @@ function BadgeItem({
   return (
     <Animated.View className="flex-1" style={animatedStyle}>
       <Pressable
-        className="flex-1 items-center justify-center rounded-[16px] border border-border bg-bg-card"
-        style={{ aspectRatio: 1, opacity: unlocked ? 1 : 0.3 }}
+        className={cn(
+          "flex-1 items-center justify-center rounded-card bg-bg-card border",
+          unlocked ? "border-gold" : "border-border",
+        )}
+        style={{
+          paddingVertical: 16,
+          paddingHorizontal: 8,
+          opacity: unlocked ? 1 : 0.3,
+        }}
         onPress={
           unlocked
             ? () => Alert.alert("徽章", `${name}\n恭喜獲得此徽章！`)
@@ -188,19 +196,17 @@ function BadgeItem({
         }
         {...pressHandlers}
       >
-        <Trophy
-          size={24}
-          color={unlocked ? "#C9A962" : "#6E6E70"}
-          strokeWidth={1.5}
-        />
-        {name ? (
-          <Text
-            className="font-body-medium text-text-primary"
-            style={{ fontSize: 10, marginTop: 8 }}
-          >
-            {name}
-          </Text>
-        ) : null}
+        {unlocked ? (
+          <Text style={{ fontSize: 24 }}>🎖️</Text>
+        ) : (
+          <Lock size={24} color="#4A4A4C" strokeWidth={1.5} />
+        )}
+        <Text
+          className="font-body-medium text-text-primary"
+          style={{ fontSize: 10, marginTop: 8 }}
+        >
+          {name}
+        </Text>
       </Pressable>
     </Animated.View>
   );
@@ -236,11 +242,11 @@ function MilestoneRow({
         }
         {...pressHandlers}
       >
-        <Coffee
-          size={20}
-          color={completed ? "#C9A962" : "#6E6E70"}
-          strokeWidth={1.5}
-        />
+        {completed ? (
+          <CheckCircle size={20} color="#6E9E6E" strokeWidth={1.5} />
+        ) : (
+          <Circle size={20} color="#3A3A3C" strokeWidth={1.5} />
+        )}
         <Text
           className="font-body-medium text-text-primary"
           style={{ fontSize: 14, marginLeft: 14, flex: 1 }}

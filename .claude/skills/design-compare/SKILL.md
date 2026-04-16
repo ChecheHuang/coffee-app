@@ -58,13 +58,20 @@ cd <project-root> && npm start &
 
 ### 3. 擷取 App 頁面 DOM 結構
 
-在背景執行 inspect script（Chrome 會持續開啟供使用者查看）：
+Script 支援 Chrome 複用 — 若已有 Chrome 開著，會直接連上去 reload 或 navigate，不會重開：
 
 ```bash
 node "<SKILL_DIR>/scripts/inspect.mjs" "http://localhost:8081<route>" ".design-compare/elements.json" &
 ```
 
 `<SKILL_DIR>` = 此 SKILL.md 所在目錄的絕對路徑。
+
+**Chrome 複用邏輯**（透過 `--port=9222` remote debugging port）：
+- Chrome 已在運行且 URL 相同 → **reload** 頁面
+- Chrome 已在運行但 URL 不同 → **navigate** 到新 URL
+- Chrome 未運行 → **啟動新的** Chrome（帶 debugging port，後續可複用）
+
+完成擷取後，script 會 disconnect 而非 close，Chrome 保持開啟。
 
 等待 `.design-compare/elements.json` 產生後，用 Read 讀取 JSON 內容。
 
@@ -139,12 +146,13 @@ node "<SKILL_DIR>/scripts/inspect.mjs" "http://localhost:8081<route>" ".design-c
 
 ### 6. 手動確認
 
-Chrome 已在步驟 3 開啟並保持運行，提醒使用者：
+Chrome 在整個比對過程中保持開啟（首次啟動後不再重開）。提醒使用者：
 - 按 F12 開啟 DevTools 進一步檢查元素
 - 可在 Elements panel 直接修改樣式測試修正效果
+- 後續再次執行 design-compare 時，會自動複用同一個 Chrome 視窗
 
 ## Scripts
 
 | Script | 功能 | 依賴 |
 |--------|------|------|
-| `scripts/inspect.mjs` | 用 puppeteer-core 擷取 DOM 結構與 computed styles，輸出 JSON | `puppeteer-core` |
+| `scripts/inspect.mjs` | 用 puppeteer-core 擷取 DOM 結構與 computed styles，支援 Chrome 複用（reload/navigate），輸出 JSON | `puppeteer-core` |

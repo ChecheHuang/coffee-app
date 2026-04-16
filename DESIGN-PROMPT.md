@@ -769,6 +769,149 @@ Bottom Bar: 無
 
 ---
 
+## Screen 11: 配方詳情 (Recipe Detail)
+
+**Active Tab:** 無 Tab Bar (Push 子頁，從 Recipes 列表進入)
+**頁面描述：** 顯示單一配方的完整資訊與沖煮參數，可直接使用此配方沖煮。
+
+### Screen Blueprint
+
+```
+Status Bar: 標準 62px
+NavHeader: 返回 + 配方名稱 + 編輯 (pencil icon)
+App Content:
+  Primary content: RecipeInfo Card + Params Card
+  Scroll behavior: 垂直捲動
+Bottom CTA: "使用此配方沖煮" 按鈕
+Bottom Bar: 無
+```
+
+### 設計指令
+
+#### 11.1 Navigation Header
+- frame horizontal, fill_container, padding [8, 28], align center, space-between
+  - 返回 IconButton: 44x44, radius 22px, fill #242426, border 1px #3A3A3C
+    - chevron-left 20px #F5F5F0
+  - 配方名稱: "早安濃縮" — Cormorant Garamond 20px medium 500 #F5F5F0
+  - 編輯 IconButton: 44x44, radius 22px, fill #242426, border 1px #3A3A3C
+    - pencil 20px #C9A962
+
+#### 11.2 RecipeInfo Card
+- frame vertical, fill_container, radius 20px, padding 24px, gap 16px
+  fill #242426, border 1px #3A3A3C
+
+  - **Top Row** — frame horizontal, fill_container, gap 16px, align center
+    - Drink Icon: frame 48x48, radius 24px, fill drink-color (e.g. #3E2723)
+      - coffee icon 24px #F5F5F0, center
+    - Info Column: frame vertical, gap 4px
+      - "Espresso" — Inter 16px medium 500 #F5F5F0
+      - "基底飲品" — Inter 12px normal 400 #6E6E70
+
+  - **Divider** — rectangle, fill_container, height 1px, fill #2A2A2C
+
+  - **Stats Row** — frame horizontal, fill_container, space-between
+    - Left: frame vertical, gap 2px
+      - "建立日期" — Inter 11px normal 400 #6E6E70
+      - "2026-03-15" — Inter 14px medium 500 #F5F5F0
+    - Right: frame vertical, gap 2px, align end
+      - "使用次數" — Inter 11px normal 400 #6E6E70
+      - "12 次" — Inter 14px medium 500 #F5F5F0
+
+#### 11.3 Params Section
+- "沖煮參數" — Inter 11px medium 500 #6E6E70, letterSpacing 3, uppercase
+
+- frame vertical, fill_container, radius 20px
+  fill #242426, border 1px #3A3A3C
+
+  每行參數: frame horizontal, fill_container, padding [16, 20], align center, space-between
+  - label — Inter 14px normal 400 #6E6E70
+  - value — Inter 14px medium 500 #F5F5F0
+  - 行間 divider: rectangle fill_container height 1px fill #2A2A2C
+
+  參數列表:
+  1. 溫度: "93°C"
+  2. 濃度: "4"
+  3. 杯量: "30ml"
+  4. 研磨度: "中細"
+  5. 預浸泡: "開" — #C9A962 (gold, 表示啟用)
+
+#### 11.4 Bottom CTA
+- frame, fill_container, padding [16, 28, 34, 28]
+  border-top 1px #2A2A2C
+  - Button/Brew: fill_container, height 56px, radius 20px
+    fill linear-gradient 135° #C9A962 → #8B7845
+    - coffee icon 20px #1A1A1C + "使用此配方沖煮" — Inter 16px semibold 600 #1A1A1C
+
+---
+
+## Screen 12: 配方編輯 (Recipe Edit / New)
+
+**Active Tab:** 無 Tab Bar (Push 子頁)
+**頁面描述：** 新增或編輯配方，包含名稱輸入、基底飲品選擇和 5 個沖煮參數 slider。
+
+### Screen Blueprint
+
+```
+Status Bar: 標準 62px
+NavHeader: 返回 + "新增配方"/"編輯配方" + "保存" 文字按鈕
+App Content:
+  Primary content: 名稱輸入 + 基底飲品選擇 + 5 個參數 Slider
+  Scroll behavior: 垂直捲動
+Bottom CTA: "保存配方" 按鈕
+Bottom Bar: 無
+```
+
+### 設計指令
+
+#### 12.1 Navigation Header
+- frame horizontal, fill_container, padding [8, 28], align center, space-between
+  - 返回 IconButton: 44x44, radius 22px, fill #242426, border 1px #3A3A3C
+    - chevron-left 20px #F5F5F0
+  - "新增配方" — Cormorant Garamond 20px medium 500 #F5F5F0
+  - "保存" — Inter 16px semibold 600 #C9A962
+
+#### 12.2 Name Input
+- frame, fill_container, radius 16px, padding 16px, fill #2A2A2C
+  - TextInput placeholder "配方名稱" — Inter 16px normal 400 #4A4A4C
+  - 輸入文字: Inter 16px normal 400 #F5F5F0
+
+#### 12.3 Base Drink Selector
+- "基底飲品" — Inter 11px medium 500 #6E6E70, letterSpacing 3
+
+- frame horizontal, fill_container, space-between
+  - 顯示可選基底飲品名稱（如 "Espresso ▪ Latte ▪ Cappuccino"）
+  - 或使用水平 Pill 列表:
+    - Active: fill #C9A962, text #1A1A1C
+    - Inactive: fill #242426, border 1px #3A3A3C, text #6E6E70
+
+#### 12.4 Parameter Sliders (×5)
+每個 slider 區塊: frame vertical, fill_container, gap 10px
+  - **Label Row** — frame horizontal, fill_container, space-between, align center
+    - label — Inter 14px medium 500 #F5F5F0
+    - value — Cormorant Garamond 20px medium 500 #C9A962
+  - **Track** — frame, fill_container, height 24px (含 knob 區域)
+    - Background: rectangle fill_container height 4px radius 2px fill #2A2A2C
+    - Fill: rectangle height 4px radius 2px fill linear-gradient 0° #C9A962 → #8B7845
+    - Knob: ellipse 24x24 fill #C9A962, border 2px #1A1A1C
+
+  Slider 列表:
+  1. 溫度: 85-96°C (顯示 "93°C")
+  2. 濃度: 1-5 (顯示 "4")
+  3. 研磨度: 1-5 (顯示映射文字 "中細")
+  4. 奶泡量: 0-100% (顯示 "中"), 非牛奶飲品時 disabled (opacity 0.4)
+  5. 杯量: 25-350ml (顯示 "30ml")
+
+  Slider 間距: gap 20px
+
+#### 12.5 Bottom CTA
+- frame vertical, fill_container, padding [16, 28, 34, 28], gap 12px
+  border-top 1px #2A2A2C
+  - Button/Primary: fill_container, height 52px, radius 20px
+    fill linear-gradient 135° #C9A962 → #8B7845
+    - "保存配方" — Inter 14px semibold 600 #1A1A1C
+
+---
+
 ## 執行順序建議
 
 Pencil 繪製時建議按以下順序，每次 `batch_design` 控制在 25 個 operation 以內：
