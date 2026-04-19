@@ -1,5 +1,5 @@
 {
-  "version": "2.10",
+  "version": "2.11",
   "children": [
     {
       "type": "frame",
@@ -350,7 +350,7 @@
                   "width": "fill_container",
                   "height": "fill_container",
                   "name": "t1",
-                  "x": 4.000000000000028,
+                  "x": 4.000000000000014,
                   "y": 4,
                   "descendants": {
                     "FEmMw": {
@@ -370,7 +370,7 @@
                   "width": "fill_container",
                   "height": "fill_container",
                   "name": "t2",
-                  "x": 74.40000000000003,
+                  "x": 74.40000000000002,
                   "y": 4,
                   "descendants": {
                     "V8C0X": {
@@ -750,6 +750,116 @@
               "fontFamily": "Inter",
               "fontSize": 12,
               "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "cpvQr",
+          "name": "Slider",
+          "reusable": true,
+          "width": 346,
+          "fill": "#00000000",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "N1AXz",
+              "name": "label-row",
+              "width": "fill_container",
+              "height": 24,
+              "fill": "#00000000",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "hmLUq",
+                  "name": "label",
+                  "fill": "#F5F5F0",
+                  "content": "研磨度",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "6Haxu",
+                  "name": "value",
+                  "fill": "#C9A962",
+                  "content": "中",
+                  "fontFamily": "Cormorant Garamond",
+                  "fontSize": 20,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mRX0H",
+              "name": "track-area",
+              "width": "fill_container",
+              "height": 24,
+              "fill": "#00000000",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2,
+                  "id": "7tE7C",
+                  "x": 0,
+                  "y": 10,
+                  "name": "track-bg",
+                  "fill": "#2A2A2C",
+                  "width": 346,
+                  "height": 4
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2,
+                  "id": "lEJsH",
+                  "x": 0,
+                  "y": 10,
+                  "name": "track-fill",
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 0,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#C9A962",
+                        "position": 0
+                      },
+                      {
+                        "color": "#8B7845",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "width": 173,
+                  "height": 4
+                },
+                {
+                  "type": "ellipse",
+                  "id": "ZhQA6",
+                  "x": 161,
+                  "y": 0,
+                  "name": "knob",
+                  "fill": "#C9A962",
+                  "width": 24,
+                  "height": 24,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 2,
+                    "fill": "#1A1A1C"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -1777,10 +1887,10 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028
+              "x": 4.000000000000014
             },
             "kjGH4": {
-              "x": 74.40000000000003
+              "x": 74.40000000000002
             }
           }
         }
@@ -2535,7 +2645,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -2545,7 +2655,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#C9A962"
             },
             "kjGH4/V8C0X": {
@@ -4542,7 +4652,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -4552,7 +4662,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#00000000"
             },
             "kjGH4/V8C0X": {
@@ -5582,7 +5692,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -5592,7 +5702,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#00000000"
             },
             "kjGH4/V8C0X": {
@@ -6290,7 +6400,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -6300,7 +6410,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#00000000"
             },
             "kjGH4/V8C0X": {

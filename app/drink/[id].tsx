@@ -16,6 +16,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { Slider } from "../../components/Slider";
+import { Button } from "../../components/Button";
 import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
 const DRINK_DATA: Record<
@@ -314,22 +315,12 @@ export default function DrinkDetailScreen() {
         className="gap-3 px-7 pb-8 pt-4"
         style={{ borderTopWidth: 1, borderTopColor: "#2A2A2C" }}
       >
-        <Pressable
-          className="h-14 overflow-hidden rounded-[20px]"
+        <Button
+          variant="brew"
+          label="開始沖煮"
+          leftIcon={<Coffee size={20} color="#1A1A1C" strokeWidth={1.5} />}
           onPress={() => router.push("/brew-progress")}
-        >
-          <LinearGradient
-            colors={["#C9A962", "#8B7845"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="flex-1 flex-row items-center justify-center gap-2"
-          >
-            <Coffee size={20} color="#1A1A1C" strokeWidth={1.5} />
-            <Text className="font-body-semibold text-base text-bg-primary">
-              開始沖煮
-            </Text>
-          </LinearGradient>
-        </Pressable>
+        />
         <Animated.View style={savePress.animatedStyle}>
           <Pressable
             className="items-center py-1"

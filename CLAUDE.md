@@ -1,31 +1,3 @@
-<!-- SPECTRA:START v1.0.1 -->
-
-# Spectra Instructions
-
-This project uses Spectra for Spec-Driven Development(SDD). Specs live in `openspec/specs/`, change proposals in `openspec/changes/`.
-
-## Use `/spectra:*` skills when:
-
-- A discussion needs structure before coding → `/spectra:discuss`
-- User wants to plan, propose, or design a change → `/spectra:propose`
-- Tasks are ready to implement → `/spectra:apply`
-- There's an in-progress change to continue → `/spectra:ingest`
-- User asks about specs or how something works → `/spectra:ask`
-- Implementation is done → `/spectra:archive`
-
-## Workflow
-
-discuss? → propose → apply ⇄ ingest → archive
-
-- `discuss` is optional — skip if requirements are clear
-- Requirements change mid-work? Plan mode → `ingest` → resume `apply`
-
-## Parked Changes
-
-Changes can be parked（暫存）— temporarily moved out of `openspec/changes/`. Parked changes won't appear in `spectra list` but can be found with `spectra list --parked`. To restore: `spectra unpark <name>`. The `/spectra:apply` and `/spectra:ingest` skills handle parked changes automatically.
-
-<!-- SPECTRA:END -->
-
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -118,9 +90,9 @@ Full tokens in `src/constants/theme.ts` and `tailwind.config.ts`.
 
 | 產物 | 角色 | 檔案 |
 |------|------|------|
-| **PRD** | 功能定義與資料模型（單一真相來源） | `PRD.md` |
+| **PRD** | 功能定義與頁面規格（單一真相來源） | `PRD.md` |
 | **設計稿** | 視覺設計與佈局規格 | `DESIGN-PROMPT.md` + `coffee-app-pencil.pen` |
-| **程式碼** | 實作 | `app/`、`components/`、`src/` |
+| **程式碼** | 實作；**型別定義為單一真相來源** | `app/`、`components/`、`src/`（型別在 `src/types/`） |
 
 ### 修改程式碼時
 
@@ -131,20 +103,28 @@ Full tokens in `src/constants/theme.ts` and `tailwind.config.ts`.
   - `DESIGN-PROMPT.md`（Style Guide Speed Lookup）
   - `tailwind.config.ts`（runtime tokens）
   - `coffee-app-pencil.pen`（設計時變數，透過 Pencil MCP 存取）
-- **涉及資料模型變更**：確認 `src/types/` 的 TypeScript 型別與 PRD 定義的資料模型一致
+- **涉及型別變更**：直接改 `src/types/`，PRD 不複述型別。若型別變更影響使用者可見行為，更新 PRD 對應頁面/功能規格
 
 ### 修改 PRD 時
 
 - 提醒使用者同步更新 `DESIGN-PROMPT.md` 和 Pencil 設計稿
-- 若涉及資料模型變更，提醒同步更新 `src/types/`
+- PRD 不再描述型別細節；型別變更直接在 `src/types/` 進行
 
 ### 修改設計稿時
 
 - 提醒使用者同步更新對應的程式碼實作
 - 若涉及新增 Design Token，提醒同步更新 `tailwind.config.ts`
 
-### 一致性檢查工具
+### 工作流 Skills
 
-- `/design-compare` — 比對 Pencil 設計稿與實際頁面的結構化屬性差異
-- `/consistency-check` — 全面審計 PRD ↔ 設計稿 ↔ 程式碼的四項一致性
-- OpenSpec 流程（`/opsx:propose`、`/opsx:apply`、`/opsx:archive`）內建一致性檢查步驟
+| Skill | 角色 | 是否寫檔 |
+|-------|------|----------|
+| `/explore` | 思考夥伴；釐清需求、找替代方案 | 否 |
+| `/propose` | 立案；寫 proposal/specs/tasks/design 4 件套 | 是（只寫 openspec/changes/） |
+| `/apply` | 實作；唯一會跨 PRD / .pen / code / SYNC-STATUS 的 skill | 是（全部） |
+| `/pencil-draw` | 繪圖；唯一動 .pen 的 skill；可獨立或被 /apply 內呼 | 是（.pen + SYNC-STATUS） |
+| `/three-way-check` | 體檢；輸出 PRD ↔ Pencil ↔ Code 同步表格 | 否 |
+| `/archive` | 歸檔；通過 Sync Status Gate 後 mv 到 archive/ | 否（只動目錄） |
+| `/sync-status` | 維護 SYNC-STATUS.md 表格本身（init / check） | 是 |
+
+**典型流程**：`/explore?` → `/propose` → `/apply`（內含 `/pencil-draw` Phase B）→ `/archive`。獨立繪圖走 `/pencil-draw` standalone → 接 `/apply`。任何時候可跑 `/three-way-check` 體檢。

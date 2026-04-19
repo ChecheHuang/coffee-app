@@ -7,6 +7,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { useRecipeStore } from "@/stores/recipeStore";
 import { PRESET_DRINKS } from "@/constants/drinks";
 import { useAnimatedPress } from "@/hooks/useAnimatedPress";
+import { Button } from "../../components/Button";
 
 const GRIND_LABELS = ["極細", "細", "中細", "中", "粗"] as const;
 
@@ -162,22 +163,12 @@ export default function RecipeDetailScreen() {
         className="px-7 pb-8 pt-4"
         style={{ borderTopWidth: 1, borderTopColor: "#2A2A2C" }}
       >
-        <Pressable
-          className="h-14 overflow-hidden rounded-[20px]"
+        <Button
+          variant="brew"
+          label="使用此配方沖煮"
+          leftIcon={<Coffee size={20} color="#1A1A1C" strokeWidth={1.5} />}
           onPress={() => router.push("/brew-progress")}
-        >
-          <LinearGradient
-            colors={["#C9A962", "#8B7845"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="flex-1 flex-row items-center justify-center gap-2"
-          >
-            <Coffee size={20} color="#1A1A1C" strokeWidth={1.5} />
-            <Text className="font-body-semibold text-base text-bg-primary">
-              使用此配方沖煮
-            </Text>
-          </LinearGradient>
-        </Pressable>
+        />
       </View>
     </SafeAreaView>
   );

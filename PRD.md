@@ -17,8 +17,9 @@
 6. [設計系統](#6-設計系統)
 7. [互動效果與動畫規範](#7-互動效果與動畫規範)
 8. [技術架構](#8-技術架構)
-9. [資料模型](#9-資料模型)
-10. [未來擴展規劃](#10-未來擴展規劃)
+9. [未來擴展規劃](#9-未來擴展規劃)
+
+> **注：** 資料模型（型別定義）以 `src/types/*` 為唯一真相來源，不在本 PRD 中複述。
 
 ---
 
@@ -540,6 +541,152 @@ App
 第 3 頁：建立個人檔案（暱稱、頭像、口味偏好）
 第 4 頁：選擇第一杯咖啡
 ```
+
+### 5.10 排程管理頁 (Schedule)
+
+對應 Pencil `0oboK` / 程式碼 `app/schedule.tsx`。
+
+**用途**：列表管理所有定時排程，可新增、編輯、啟用/停用單一排程。
+
+**版面結構**
+
+```
+┌──────────────────────┐
+│ ← 排程管理     [+]    │  Nav Bar (44px) — 返回 / 標題 / 新增按鈕
+├──────────────────────┤
+│ ┌──────────────────┐ │
+│ │ 早晨咖啡   07:30 │ │  Schedule Card
+│ │ Espresso · 93°C  │ │  - name (Inter 14 medium)
+│ │ 一二三四五       │ │  - drink + temp (Inter 12 secondary)
+│ │ ─────────  [On] │ │  - 週幾 chips + Toggle
+│ └──────────────────┘ │
+│ ┌──────────────────┐ │
+│ │ 午後拿鐵   14:00 │ │
+│ │ Latte · 90°C     │ │
+│ │ 一二三四五  [Off]│ │
+│ └──────────────────┘ │
+└──────────────────────┘
+```
+
+**設計規格**
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 高 44px，左 IconButton (返回) + 中標題 (Cormorant Garamond 20) + 右 IconButton (Plus) |
+| Schedule Card | bg `#242426`, radius 20px, padding 20px, gap 12px |
+| 時間 (大字) | Cormorant Garamond 42px Light, gold |
+| 名稱 | Inter 14px Medium, text-primary |
+| 飲品資訊 | Inter 12px Regular, text-secondary |
+| 週幾 chip | 7 個 8x8 圓點，啟用日 gold，未啟用 #4A4A4C |
+| Toggle | 元件庫 Toggle/On 或 Toggle/Off |
+| Card 間距 | sectionGap (40px) |
+
+**互動**
+
+- 點 Card → 進入編輯模式（暫以 Alert 呈現）
+- 切 Toggle → 切換啟用狀態
+- 點 + → 新增排程 modal
+
+### 5.11 配方詳情頁 (Recipe Detail)
+
+對應 Pencil `g5FJg` / 程式碼 `app/recipe/[id].tsx`。
+
+**用途**：檢視單一配方的完整參數與使用紀錄。
+
+**版面結構**
+
+```
+┌──────────────────────┐
+│ ← 配方名稱      ✏️    │  Nav Bar — 返回 / 標題 / 編輯
+├──────────────────────┤
+│ ┌──────────────────┐ │
+│ │ Espresso         │ │  基底飲品 Card
+│ │ 基底飲品          │ │
+│ │ 建立 03-15  12次 │ │  Stats Row
+│ └──────────────────┘ │
+│ ── 沖煮參數 ───────  │  Section Header
+│ 溫度       93°C      │
+│ 濃度       4         │  Param Row x N
+│ 杯量       30ml      │
+│ 研磨度     中細      │
+│ 預浸泡     開        │
+├──────────────────────┤
+│ [使用此配方沖煮]      │  Bottom CTA (Brew button)
+└──────────────────────┘
+```
+
+**設計規格**
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 同 §5.10，右側為 IconButton (Pencil) |
+| 基底飲品 Card | Card 元件，內含 drink name (Inter 16 medium) + sub label + StatsRow |
+| StatsRow | 兩欄等寬，左 label (Inter 11 secondary)，下 value (Inter 14 primary) |
+| Section Header | SectionHeader 元件，「沖煮參數」(Inter 11 medium uppercase, letterSpacing 3) |
+| Param Row | 高 44px，左 label (Inter 14 secondary)，右 value (Inter 14 primary)。預浸泡值用 gold |
+| Bottom CTA | Brew button (gold gradient, 56px, radius 20px)，文字「使用此配方沖煮」+ Coffee 圖示 |
+| Bottom CTA padding | px 28, py 16, top border 1px `#2A2A2C` |
+
+**互動**
+
+- 點 ✏️ → 跳轉至 `app/recipe/edit.tsx?recipeId=...`
+- 點 Bottom CTA → 跳轉至 `app/brew-progress`
+
+### 5.12 配方編輯／新增頁 (Recipe Edit)
+
+對應 Pencil `gWPdG` / 程式碼 `app/recipe/edit.tsx`。
+
+**用途**：建立新配方或編輯既有配方。
+
+**版面結構**
+
+```
+┌──────────────────────┐
+│ ← 新增配方     保存    │  Nav Bar — 返回 / 標題 / 保存
+├──────────────────────┤
+│ [配方名稱輸入框      ]│  TextInput
+│ ── 基底飲品 ────────  │  Section Header
+│ [濃縮][拿鐵][卡布]…   │  Drink Pills (橫向 scroll)
+│ ── 沖煮參數 ────────  │
+│ 溫度          93°C    │  Slider rows (元件庫 Slider)
+│ ━━━━●━━━━━━━━━━      │
+│ 濃度          4       │
+│ ━━━●━━━━━━━━━━━      │
+│ 研磨度        中細    │
+│ ━━━━━●━━━━━━━━       │
+│ 杯量          30ml    │
+│ ━━━━●━━━━━━━━━━      │
+├──────────────────────┤
+│ [保存配方]            │  Bottom CTA (Primary button)
+└──────────────────────┘
+```
+
+**設計規格**
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 同 §5.10。右側為 Text 按鈕「保存」(Inter 16 semibold, gold) |
+| 配方名稱 input | bg `#2A2A2C`, radius 16px, padding 16px, Inter 16, placeholder `#4A4A4C` |
+| Drink Pills | Pill/Active 與 Pill/Inactive，橫向排列 gap 8px |
+| Slider Row | Slider 元件（label + value + track） |
+| Section Header | SectionHeader 元件 |
+| Bottom CTA | Primary button (gold gradient, 52px, radius 20px)，文字「保存配方」 |
+| Bottom CTA padding | px 28, py 16, top border 1px `#2A2A2C` |
+
+**參數範圍**
+
+| 參數 | Min | Max | 單位 |
+|------|-----|-----|------|
+| 溫度 | 85 | 96 | °C |
+| 濃度 | 1 | 5 | 級 |
+| 研磨度 | 1 | 5 | 級（極細→粗） |
+| 奶泡量 | 0 | 100 | %（依基底飲品決定可否調） |
+| 杯量 | 25 | 350 | ml（5ml 為一格） |
+
+**互動**
+
+- 點「保存」或 Bottom CTA → 寫入 Zustand `recipeStore`，返回上一頁
+- 編輯模式下載入既有 `recipe` 預填欄位
 
 ---
 

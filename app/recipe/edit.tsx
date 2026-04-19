@@ -6,6 +6,7 @@ import { ChevronLeft, Coffee } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { Slider } from "../../components/Slider";
+import { Button } from "../../components/Button";
 import { useRecipeStore } from "@/stores/recipeStore";
 import { PRESET_DRINKS } from "@/constants/drinks";
 import { useAnimatedPress } from "@/hooks/useAnimatedPress";
@@ -229,21 +230,7 @@ export default function RecipeEditScreen() {
         className="px-7 pb-8 pt-4"
         style={{ borderTopWidth: 1, borderTopColor: "#2A2A2C" }}
       >
-        <Pressable
-          className="h-[52px] overflow-hidden rounded-[20px]"
-          onPress={handleSave}
-        >
-          <LinearGradient
-            colors={["#C9A962", "#8B7845"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="flex-1 items-center justify-center"
-          >
-            <Text className="font-body-semibold text-sm text-bg-primary">
-              保存配方
-            </Text>
-          </LinearGradient>
-        </Pressable>
+        <Button variant="primary" label="保存配方" onPress={handleSave} />
       </View>
     </SafeAreaView>
   );
