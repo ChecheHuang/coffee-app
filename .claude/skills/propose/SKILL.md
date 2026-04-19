@@ -153,9 +153,18 @@ OpenSpec 風格的規格 delta：
 - needs_prd_update: true
 - affected_pages: [Drinks, drink/[id]]
 - affected_components: [Button]
-
-**Next:** /apply <change-name>
 ```
+
+### 6. 交接點
+
+用 **AskUserQuestion** 問下一步（4 選 1）：
+
+- "立刻 /apply <name> (Recommended)" — 同 session 繼續，保留釐清過程的脈絡
+- "/compact 後 /apply <name>" — 提示使用者輸入 `/compact` 壓縮摘要、再 `/apply <name>`。保留決策脈絡但釋放 token
+- "/clear 後 /apply <name>" — 提示使用者輸入 `/clear` 全清、再 `/apply <name>`。SDD 4 件套已落地，新 session 從文檔重啟最乾淨
+- "稍後再實作" — 結束本 session，提示下次跑 `/apply <name>`
+
+**Claude 無法主動觸發 `/clear` 或 `/compact`——必須由使用者手動輸入。** 本 skill 只回應確認訊息與下一步指令，不嘗試自動清理。
 
 ## Guardrails
 

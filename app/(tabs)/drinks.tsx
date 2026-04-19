@@ -1,13 +1,15 @@
-import { useState } from "react";
-import { View, Text, ScrollView, Pressable, Alert } from "react-native";
+import { useRef, useState } from "react";
+import { View, Text, ScrollView, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { Search, Coffee } from "lucide-react-native";
+import { Search, Coffee, X } from "lucide-react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   FadeInUp,
+  FadeIn,
+  FadeOut,
 } from "react-native-reanimated";
 import { useAnimatedPress } from "@/hooks/useAnimatedPress";
 
@@ -26,16 +28,27 @@ const DRINKS = [
 export default function DrinksScreen() {
   const [activeTab, setActiveTab] = useState(0);
   const [tabContainerWidth, setTabContainerWidth] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<TextInput>(null);
   const searchPress = useAnimatedPress({ type: "opacity" });
+  const closePress = useAnimatedPress({ type: "opacity" });
   const indicatorX = useSharedValue(0);
 
   const tabWidth =
     tabContainerWidth > 0 ? tabContainerWidth / CATEGORIES.length : 0;
 
-  const filteredDrinks =
-    activeTab === 0
-      ? DRINKS
-      : DRINKS.filter((d) => d.category === CATEGORIES[activeTab]);
+  const filteredDrinks = (() => {
+    if (isSearching) {
+      const q = searchQuery.trim().toLowerCase();
+      if (q.length === 0) return DRINKS;
+      return DRINKS.filter(
+        (d) => d.name.toLowerCase().includes(q) || d.zh.includes(searchQuery.trim()),
+      );
+    }
+    if (activeTab === 0) return DRINKS;
+    return DRINKS.filter((d) => d.category === CATEGORIES[activeTab]);
+  })();
 
   const handleTabPress = (index: number) => {
     setActiveTab(index);
@@ -43,9 +56,22 @@ export default function DrinksScreen() {
     indicatorX.value = withTiming(index * w, { duration: 300 });
   };
 
+  const handleOpenSearch = () => {
+    setIsSearching(true);
+    setTimeout(() => searchInputRef.current?.focus(), 50);
+  };
+
+  const handleCloseSearch = () => {
+    setIsSearching(false);
+    setSearchQuery("");
+  };
+
   const indicatorStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: indicatorX.value }],
   }));
+
+  const showEmptyState =
+    isSearching && searchQuery.trim().length > 0 && filteredDrinks.length === 0;
 
   // Build 2-column grid rows
   const rows: (typeof DRINKS)[] = [];
@@ -57,88 +83,141 @@ export default function DrinksScreen() {
     <SafeAreaView className="flex-1 bg-bg-primary">
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 28 }}
+        contentContainerStyle={{ paddingBottom: 28, flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
         {/* Header */}
-        <View className="flex-row items-center justify-between px-7">
-          <Text className="font-display text-[36px] text-text-primary">
-            飲品
-          </Text>
-          <Animated.View style={searchPress.animatedStyle}>
+        <View className="flex-row items-center justify-between gap-3 px-7">
+          {isSearching ? (
+            <Animated.View
+              key="search-input"
+              entering={FadeIn.duration(200)}
+              exiting={FadeOut.duration(200)}
+              style={{ flex: 1 }}
+            >
+              <View className="h-12 flex-row items-center gap-2.5 rounded-xl border border-border bg-bg-card px-4">
+                <Search size={18} color="#6E6E70" strokeWidth={1.5} />
+                <TextInput
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="搜尋飲品..."
+                  placeholderTextColor="#6E6E70"
+                  className="flex-1 font-body text-text-primary"
+                  style={{ fontSize: 16 }}
+                  returnKeyType="search"
+                  autoCorrect={false}
+                />
+              </View>
+            </Animated.View>
+          ) : (
+            <Animated.View
+              key="title"
+              entering={FadeIn.duration(200)}
+              exiting={FadeOut.duration(200)}
+            >
+              <Text className="font-display text-[36px] text-text-primary">
+                飲品
+              </Text>
+            </Animated.View>
+          )}
+          <Animated.View
+            style={isSearching ? closePress.animatedStyle : searchPress.animatedStyle}
+          >
             <Pressable
               className="h-11 w-11 items-center justify-center rounded-full border border-border bg-bg-card"
-              onPress={() => Alert.alert("搜尋", "搜尋功能即將推出")}
-              {...searchPress.pressHandlers}
+              onPress={isSearching ? handleCloseSearch : handleOpenSearch}
+              accessibilityLabel={isSearching ? "關閉搜尋" : "搜尋飲品"}
+              {...(isSearching ? closePress.pressHandlers : searchPress.pressHandlers)}
             >
-              <Search size={20} color="#6E6E70" strokeWidth={1.5} />
+              {isSearching ? (
+                <X size={20} color="#6E6E70" strokeWidth={1.5} />
+              ) : (
+                <Search size={20} color="#6E6E70" strokeWidth={1.5} />
+              )}
             </Pressable>
           </Animated.View>
         </View>
 
-        {/* Category Tabs */}
-        <View className="mt-6 px-7">
-          <View className="rounded-[24px] border border-border bg-bg-card p-1">
-            <View className="relative">
-              {tabWidth > 0 && (
-                <Animated.View
-                  style={[
-                    {
-                      position: "absolute",
-                      top: 0,
-                      width: tabWidth,
-                      height: 36,
-                      borderRadius: 20,
-                      backgroundColor: "#C9A962",
-                    },
-                    indicatorStyle,
-                  ]}
-                />
-              )}
-              <View
-                className="flex-row"
-                onLayout={(e) =>
-                  setTabContainerWidth(e.nativeEvent.layout.width)
-                }
-              >
-                {CATEGORIES.map((cat, i) => (
-                  <Pressable
-                    key={cat}
-                    className="flex-1 items-center justify-center"
-                    style={{ height: 36 }}
-                    onPress={() => handleTabPress(i)}
-                  >
-                    <Text
-                      className={`font-body-medium text-[13px] ${
-                        activeTab === i
-                          ? "text-bg-primary"
-                          : "text-text-secondary"
-                      }`}
+        {/* Category Tabs — 搜尋態隱藏 */}
+        {!isSearching && (
+          <Animated.View
+            entering={FadeIn.duration(200)}
+            exiting={FadeOut.duration(200)}
+            className="mt-6 px-7"
+          >
+            <View className="rounded-[24px] border border-border bg-bg-card p-1">
+              <View className="relative">
+                {tabWidth > 0 && (
+                  <Animated.View
+                    style={[
+                      {
+                        position: "absolute",
+                        top: 0,
+                        width: tabWidth,
+                        height: 36,
+                        borderRadius: 20,
+                        backgroundColor: "#C9A962",
+                      },
+                      indicatorStyle,
+                    ]}
+                  />
+                )}
+                <View
+                  className="flex-row"
+                  onLayout={(e) =>
+                    setTabContainerWidth(e.nativeEvent.layout.width)
+                  }
+                >
+                  {CATEGORIES.map((cat, i) => (
+                    <Pressable
+                      key={cat}
+                      className="flex-1 items-center justify-center"
+                      style={{ height: 36 }}
+                      onPress={() => handleTabPress(i)}
                     >
-                      {cat}
-                    </Text>
-                  </Pressable>
-                ))}
+                      <Text
+                        className={`font-body-medium text-[13px] ${
+                          activeTab === i
+                            ? "text-bg-primary"
+                            : "text-text-secondary"
+                        }`}
+                      >
+                        {cat}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
               </View>
             </View>
-          </View>
-        </View>
+          </Animated.View>
+        )}
 
-        {/* Drink Grid */}
-        <View key={activeTab} className="mt-6 gap-4 px-7">
-          {rows.map((row, rowIndex) => (
-            <View key={rowIndex} className="flex-row gap-4">
-              {row.map((drink, colIndex) => (
-                <DrinkCard
-                  key={drink.id}
-                  drink={drink}
-                  index={rowIndex * 2 + colIndex}
-                />
-              ))}
-              {row.length === 1 && <View className="flex-1" />}
-            </View>
-          ))}
-        </View>
+        {/* Drink Grid / Empty State */}
+        {showEmptyState ? (
+          <View className="mt-6 flex-1 items-center justify-center gap-4 px-7 py-20">
+            <Coffee size={48} color="#6E6E70" strokeWidth={1.5} />
+            <Text className="font-body text-sm text-text-secondary">
+              找不到符合的飲品
+            </Text>
+          </View>
+        ) : (
+          <View key={`${activeTab}-${isSearching}`} className="mt-6 gap-4 px-7">
+            {rows.map((row, rowIndex) => (
+              <View key={rowIndex} className="flex-row gap-4">
+                {row.map((drink, colIndex) => (
+                  <DrinkCard
+                    key={drink.id}
+                    drink={drink}
+                    index={rowIndex * 2 + colIndex}
+                  />
+                ))}
+                {row.length === 1 && <View className="flex-1" />}
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

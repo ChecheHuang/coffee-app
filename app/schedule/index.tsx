@@ -1,53 +1,20 @@
-import { useState } from "react";
-import { View, Text, Pressable, ScrollView, Alert } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { ChevronLeft, Plus } from "lucide-react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useAnimatedPress } from "@/hooks/useAnimatedPress";
+import { useScheduleStore } from "@/stores/scheduleStore";
+import type { Schedule } from "@/types/schedule";
 
-/* ── Types ────────────────────────────────────────────── */
-
-interface ScheduleItem {
-  id: string;
-  name: string;
-  desc: string;
-  time: string;
-  activeDays: boolean[]; // 7 booleans for 一二三四五六日
-  enabled: boolean;
-}
-
-const DAY_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
-
-const INITIAL_SCHEDULES: ScheduleItem[] = [
-  {
-    id: "1",
-    name: "早晨咖啡",
-    desc: "Espresso · 93°C",
-    time: "07:30",
-    activeDays: [true, true, true, true, true, false, false],
-    enabled: true,
-  },
-  {
-    id: "2",
-    name: "午後拿鐵",
-    desc: "Latte · 90°C",
-    time: "14:00",
-    activeDays: [true, true, true, true, true, false, false],
-    enabled: true,
-  },
-];
+const DAY_LABELS = ["一", "二", "三", "四", "五", "六", "日"] as const;
+// DAY_LABELS index → Schedule.days value (0=日,1=一,...,6=六)
+const LABEL_TO_DAY = [1, 2, 3, 4, 5, 6, 0] as const;
 
 /** Screen 8: 排程管理 (Schedule) */
 export default function ScheduleScreen() {
-  const [schedules, setSchedules] = useState<ScheduleItem[]>(INITIAL_SCHEDULES);
+  const { schedules, toggleEnabled } = useScheduleStore();
   const addPress = useAnimatedPress({ type: "opacity" });
-
-  const toggleSchedule = (id: string) => {
-    setSchedules((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s)),
-    );
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-bg-primary">
@@ -65,7 +32,7 @@ export default function ScheduleScreen() {
         <Animated.View style={addPress.animatedStyle}>
           <Pressable
             className="h-11 w-11 items-center justify-center rounded-full bg-gold"
-            onPress={() => Alert.alert("新增排程", "新增排程功能即將推出")}
+            onPress={() => router.push("/schedule/new")}
             {...addPress.pressHandlers}
           >
             <Plus size={18} color="#1A1A1C" strokeWidth={2} />
@@ -76,7 +43,12 @@ export default function ScheduleScreen() {
       {/* 排程卡片列表 */}
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingHorizontal: 28, paddingTop: 16, paddingBottom: 32, gap: 16 }}
+        contentContainerStyle={{
+          paddingHorizontal: 28,
+          paddingTop: 16,
+          paddingBottom: 32,
+          gap: 16,
+        }}
         showsVerticalScrollIndicator={false}
       >
         {schedules.map((schedule, index) => (
@@ -84,7 +56,7 @@ export default function ScheduleScreen() {
             key={schedule.id}
             schedule={schedule}
             index={index}
-            onToggle={() => toggleSchedule(schedule.id)}
+            onToggle={() => toggleEnabled(schedule.id)}
           />
         ))}
       </ScrollView>
@@ -99,37 +71,38 @@ function ScheduleCard({
   index,
   onToggle,
 }: {
-  schedule: ScheduleItem;
+  schedule: Schedule;
   index: number;
   onToggle: () => void;
 }) {
-  const [localDays, setLocalDays] = useState(schedule.activeDays);
-
-  const toggleDay = (dayIndex: number) => {
-    setLocalDays((prev) => prev.map((v, i) => (i === dayIndex ? !v : v)));
-  };
-
   return (
     <Animated.View
       entering={FadeInUp.delay(index * 120 + 100)
         .springify()
         .damping(18)}
     >
-      <View
+      <Pressable
+        onPress={() => router.push(`/schedule/edit?id=${schedule.id}`)}
         className="rounded-card bg-bg-card border border-border"
         style={{ padding: 20, gap: 16 }}
       >
-        {/* Top row: name/desc + toggle */}
+        {/* Top row: name + toggle */}
         <View className="flex-row items-center justify-between">
           <View style={{ gap: 4 }}>
-            <Text className="font-display-medium text-text-primary" style={{ fontSize: 18 }}>
+            <Text
+              className="font-display-medium text-text-primary"
+              style={{ fontSize: 18 }}
+            >
               {schedule.name}
             </Text>
-            <Text className="font-body text-text-secondary" style={{ fontSize: 12 }}>
-              {schedule.desc}
+            <Text
+              className="font-body text-text-secondary"
+              style={{ fontSize: 12 }}
+            >
+              {schedule.drinkId} · {schedule.temperature ?? "—"}°C
             </Text>
           </View>
-          <Toggle enabled={schedule.enabled} onPress={onToggle} />
+          <Toggle enabled={schedule.isEnabled} onPress={onToggle} />
         </View>
 
         {/* Time */}
@@ -143,59 +116,38 @@ function ScheduleCard({
             <DayCircle
               key={label}
               label={label}
-              isActive={localDays[i]}
-              onPress={() => toggleDay(i)}
+              isActive={schedule.days.includes(LABEL_TO_DAY[i])}
             />
           ))}
         </View>
-      </View>
-    </Animated.View>
-  );
-}
-
-function DayCircle({
-  label,
-  isActive,
-  onPress,
-}: {
-  label: string;
-  isActive: boolean;
-  onPress: () => void;
-}) {
-  const { animatedStyle, pressHandlers } = useAnimatedPress({ type: "opacity" });
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <Pressable
-        className={`items-center justify-center rounded-full ${
-          isActive ? "bg-gold" : "border border-border"
-        }`}
-        style={{ width: 40, height: 40 }}
-        onPress={onPress}
-        {...pressHandlers}
-      >
-        <Text
-          className={`font-body-medium ${
-            isActive ? "text-bg-primary" : "text-text-secondary"
-          }`}
-          style={{ fontSize: 13 }}
-        >
-          {label}
-        </Text>
       </Pressable>
     </Animated.View>
   );
 }
 
+function DayCircle({ label, isActive }: { label: string; isActive: boolean }) {
+  return (
+    <View
+      className={`items-center justify-center rounded-full ${
+        isActive ? "bg-gold" : "border border-border"
+      }`}
+      style={{ width: 40, height: 40 }}
+    >
+      <Text
+        className={`font-body-medium ${
+          isActive ? "text-bg-primary" : "text-text-secondary"
+        }`}
+        style={{ fontSize: 13 }}
+      >
+        {label}
+      </Text>
+    </View>
+  );
+}
+
 /* ── Toggle ───────────────────────────────────────────── */
 
-function Toggle({
-  enabled,
-  onPress,
-}: {
-  enabled: boolean;
-  onPress: () => void;
-}) {
+function Toggle({ enabled, onPress }: { enabled: boolean; onPress: () => void }) {
   return (
     <Pressable onPress={onPress}>
       <View
@@ -210,12 +162,7 @@ function Toggle({
         }}
       >
         <View
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: 12,
-            backgroundColor: "#FFFFFF",
-          }}
+          style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: "#FFFFFF" }}
         />
       </View>
     </Pressable>

@@ -19,7 +19,8 @@ description: >-
 | Read PRD / 既有實作 | 改 PRD / 改 .pen / 改 code |
 | Grep / Glob 校準理解 | 動 SYNC-STATUS |
 | 列出選項與權衡 | 建立 openspec change |
-| 推薦下一個 skill | 自動跳轉到其他 skill |
+| 呼叫 `/agent-reach` 搜尋外部靈感/案例 | 跳轉到 /propose、/apply 等其他 skill |
+| 推薦下一個 skill | — |
 
 ## 步驟
 
@@ -47,6 +48,11 @@ description: >-
 - 是否需要 Run-and-Verify Gate（任何 UI 改動都需要）
 - 是否影響 Onboarding 流程（4 步互鎖）
 
+若比較方向需要外部資料（業界做法、競品範例、現有工具選項），可呼叫 `/agent-reach` 搜尋後引用結果，幫助使用者發散思考。觸發時機：
+- 使用者問「業界有沒有人這樣做？」
+- 需要比較第三方套件/API 的優劣
+- 要找 UI 靈感或相似設計案例
+
 ### 4. 推薦下一步
 
 對話結束時，給一句明確建議：
@@ -55,7 +61,7 @@ description: >-
 - 「這應該不是新 change，直接用 `/apply <existing>` 接手既有 change」
 - 「先跑 `/three-way-check` 確認現況再決定」
 
-**不要主動呼叫其他 skill**——只給建議。
+**不要主動跳轉到 /propose、/apply 等實作 skill**——只給建議。例外：可呼叫 `/agent-reach` 取得外部靈感，引導發散思考。
 
 ## Guardrails
 

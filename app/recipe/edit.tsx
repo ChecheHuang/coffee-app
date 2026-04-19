@@ -18,9 +18,32 @@ function grindToLabel(level: number): string {
   return GRIND_LABELS[Math.min(level - 1, GRIND_LABELS.length - 1)] ?? "中";
 }
 
+function parseNumParam(raw: string | undefined, fallback: number): number {
+  if (!raw) return fallback;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 /** Screen 12: 配方編輯 / 新增 (Recipe Edit) — 對應 Pencil 設計稿 */
 export default function RecipeEditScreen() {
-  const { recipeId } = useLocalSearchParams<{ recipeId?: string }>();
+  const {
+    recipeId,
+    drinkId,
+    temperature: tParam,
+    intensity: iParam,
+    grindLevel: gParam,
+    milkFoam: mParam,
+    volume: vParam,
+  } = useLocalSearchParams<{
+    recipeId?: string;
+    drinkId?: string;
+    temperature?: string;
+    intensity?: string;
+    grindLevel?: string;
+    milkFoam?: string;
+    volume?: string;
+  }>();
+
   const existingRecipe = useRecipeStore((s) =>
     recipeId ? s.recipes.find((r) => r.id === recipeId) : undefined,
   );
@@ -29,24 +52,33 @@ export default function RecipeEditScreen() {
 
   const isEditMode = !!existingRecipe;
 
+  // 初始基底飲品：編輯模式 > 來源飲品 > 預設第一筆
+  const initialDrink =
+    (existingRecipe && PRESET_DRINKS.find((d) => d.id === existingRecipe.drinkId)) ??
+    (drinkId ? PRESET_DRINKS.find((d) => d.id === drinkId) : undefined) ??
+    PRESET_DRINKS[0];
+
   const [name, setName] = useState(existingRecipe?.name ?? "");
-  const [selectedDrinkId, setSelectedDrinkId] = useState(
-    existingRecipe?.drinkId ?? PRESET_DRINKS[0].id,
-  );
+  const [selectedDrinkId, setSelectedDrinkId] = useState(initialDrink.id);
   const [temperature, setTemperature] = useState(
-    existingRecipe?.params.temperature ?? 92,
+    existingRecipe?.params.temperature ??
+      parseNumParam(tParam, initialDrink.defaultParams.temperature),
   );
   const [intensity, setIntensity] = useState(
-    existingRecipe?.params.intensity ?? 3,
+    existingRecipe?.params.intensity ??
+      parseNumParam(iParam, initialDrink.defaultParams.intensity),
   );
   const [grindLevel, setGrindLevel] = useState(
-    existingRecipe?.params.grindLevel ?? 3,
+    existingRecipe?.params.grindLevel ??
+      parseNumParam(gParam, initialDrink.defaultParams.grindLevel),
   );
   const [milkFoam, setMilkFoam] = useState(
-    existingRecipe?.params.milkFoam ?? 0,
+    existingRecipe?.params.milkFoam ??
+      parseNumParam(mParam, initialDrink.defaultParams.milkFoam),
   );
   const [volume, setVolume] = useState(
-    existingRecipe?.params.volume ?? 120,
+    existingRecipe?.params.volume ??
+      parseNumParam(vParam, initialDrink.defaultParams.volume),
   );
 
   const selectedDrink = PRESET_DRINKS.find((d) => d.id === selectedDrinkId) ?? PRESET_DRINKS[0];

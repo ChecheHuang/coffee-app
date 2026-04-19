@@ -51,7 +51,7 @@ export default function AchievementsScreen() {
           >
             <ChevronLeft size={20} color="#F5F5F0" strokeWidth={1.5} />
           </Pressable>
-          <Text className="font-display-medium ml-4 text-xl text-text-primary">
+          <Text className="font-display-medium ml-3 text-xl text-text-primary">
             成就
           </Text>
         </Animated.View>
@@ -109,7 +109,7 @@ export default function AchievementsScreen() {
 
         {/* Badges Section */}
         <Animated.View
-          className="mt-7 px-7"
+          className="mt-10 px-7"
           entering={FadeInUp.delay(160).springify().damping(20).stiffness(150)}
         >
           <Text
@@ -137,7 +137,7 @@ export default function AchievementsScreen() {
 
         {/* Milestones Section */}
         <Animated.View
-          className="mt-7 px-7"
+          className="mt-10 px-7"
           entering={FadeInUp.delay(240).springify().damping(20).stiffness(150)}
         >
           <Text

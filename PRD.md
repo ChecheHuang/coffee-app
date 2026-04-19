@@ -304,6 +304,33 @@ App
 └─────────────────────────────────────┘
 ```
 
+#### 5.2.1 搜尋（Inline 搜尋態）
+
+Drinks 頁右上角 Search IconButton 觸發 inline 搜尋，不跳頁。
+
+**狀態切換**
+
+- **標題模式（預設）**：左側「飲品」標題（Cormorant Garamond 36px）+ 右側 Search IconButton；下方顯示分類 Tab Bar
+- **搜尋模式**：左側 TextInput（placeholder「搜尋飲品...」，Inter 16，autoFocus）+ 右側 X(Close) IconButton；分類 Tab Bar 隱藏
+- 兩模式以 Reanimated FadeIn/FadeOut 200ms crossfade 切換
+
+**搜尋邏輯**
+
+- 輸入字串即時過濾飲品清單
+- 比對欄位：`name`（英文）與 `zh`（中文），substring match，case-insensitive
+- 搜尋啟用時忽略當前分類 Tab（搜尋全清單）
+- 不做模糊比對 / typo tolerance（MVP 範圍）
+- 搜尋來源：`DRINKS` 預設清單；個人配方搜尋暫不納入
+
+**空狀態**
+
+- 條件：搜尋字串非空且 `filteredDrinks.length === 0`
+- 呈現：Coffee icon（Lucide，48px，#6E6E70）+ 文字「找不到符合的飲品」（Inter 14，text-secondary），垂直置中於 Grid 區
+
+**關閉**
+
+- 點 X IconButton：清空 query、回到標題模式、Tab Bar 重新顯示、Grid 恢復當前 Tab 完整清單
+
 ### 5.3 飲品詳情 / 參數調整頁
 
 ```
@@ -488,7 +515,7 @@ App
 │                                     │
 │  ── 用戶 ────────────────────────  │
 │  ┌─────────────────────────────┐   │
-│  │ 👤 Bennett            →     │   │
+│  │ 👤 Bennett   → /profile     │   │
 │  │ 👥 家庭成員管理        →     │   │
 │  └─────────────────────────────┘   │
 │                                     │
@@ -544,7 +571,7 @@ App
 
 ### 5.10 排程管理頁 (Schedule)
 
-對應 Pencil `0oboK` / 程式碼 `app/schedule.tsx`。
+對應 Pencil `0oboK` / 程式碼 `app/schedule/index.tsx`。
 
 **用途**：列表管理所有定時排程，可新增、編輯、啟用/停用單一排程。
 
@@ -583,9 +610,100 @@ App
 
 **互動**
 
-- 點 Card → 進入編輯模式（暫以 Alert 呈現）
+- 點 Card → `router.push('/schedule/edit?id=...')`，以 modal presentation 從底部滑入
 - 切 Toggle → 切換啟用狀態
-- 點 + → 新增排程 modal
+- 點 + → `router.push('/schedule/new')`，以 modal presentation 從底部滑入
+
+### 5.10.1 新增排程 Modal (/schedule/new)
+
+對應 Pencil `（待建）` / 程式碼 `app/schedule/new.tsx`。
+
+**用途**：讓使用者建立一個新的定時排程。
+
+**版面結構**
+
+```
+┌──────────────────────┐
+│ 取消          保存    │  Nav Bar — 取消 (text-secondary) / 保存 (gold)
+├──────────────────────┤
+│ 新增排程              │  頁面標題 (Cormorant Garamond 28)
+├──────────────────────┤
+│ 名稱                  │  Section: 名稱
+│ ┌──────────────────┐ │
+│ │ 晨間 Latte...    │ │  TextInput
+│ └──────────────────┘ │
+├──────────────────────┤
+│ 時間                  │  Section: 時間
+│ ┌────┐  ┌────┐      │
+│ │ 07 │  │ 30 │      │  TimePicker（自訂雙欄：時/分）
+│ └────┘  └────┘      │
+├──────────────────────┤
+│ 飲品                  │  Section: 飲品
+│ [Espresso] [Latte]   │  Pill 列表（橫向捲動）
+├──────────────────────┤
+│ 溫度  92°C            │  Section: 溫度（可選）
+│ ━━━━●━━━━━━━━━━━     │  Slider (85–96°C)
+├──────────────────────┤
+│ 重複                  │  Section: 重複
+│ 一 二 三 四 五 六 日   │  7 個 DayCircle（啟用 gold / 未啟用 #4A4A4C）
+└──────────────────────┘
+```
+
+**設計規格**
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 左「取消」(Inter 16 regular, text-secondary) + 右「保存」(Inter 16 semibold, gold) |
+| 頁面標題 | Cormorant Garamond 28px, text-primary, contentPadding 28px |
+| TextInput | bg `#2A2A2C`, radius 16px, padding 16px, Inter 16, placeholder `#4A4A4C` |
+| TimePicker | 自訂雙欄 Picker（時 0–23 / 分 0–59 每 5 分），Cormorant Garamond 42px Light, gold |
+| 飲品 Pill | Pill/Active (gold border) / Pill/Inactive，橫向排列 gap 8px |
+| Slider | 同 §5.12 recipe/edit 規格，85–96°C 範圍 |
+| DayCircle | 40×40px 圓形按鈕，啟用 gold border + gold text，未啟用 #4A4A4C |
+| Section Header | Inter 11px medium uppercase, letterSpacing 3, text-secondary |
+| 欄位間距 | gap 24px |
+
+**預設值**
+
+| 欄位 | 預設 |
+|------|------|
+| 名稱 | 空白 |
+| 時間 | 07:30 |
+| 飲品 | PRESET_DRINKS[0]（Espresso） |
+| 溫度 | 92°C |
+| 重複 | 全部星期（days: [0,1,2,3,4,5,6]） |
+| isEnabled | true |
+
+**互動**
+
+- 「保存」：名稱 trim 空 → Alert「請輸入排程名稱」；days 空陣列 → Alert「請至少選擇一天」；驗證通過 → `scheduleStore.addSchedule(...)` → `router.back()`
+- 「取消」：直接 `router.back()`，不彈確認（MVP 不做 dirty check）
+- DayCircle：點擊切換啟用/停用，支援多選
+
+### 5.10.2 編輯排程 Modal (/schedule/edit)
+
+對應 Pencil `（待建）` / 程式碼 `app/schedule/edit.tsx`。
+
+**用途**：編輯既有排程的所有欄位，或刪除該排程。接受 `?id=<scheduleId>` query param。
+
+**版面結構**（同 §5.10.1，以現有資料預填）
+
+| 欄位 | 預填值 |
+|------|--------|
+| 名稱 | 排程現有名稱 |
+| 時間 | 排程現有時間 |
+| 飲品 | 排程現有飲品 |
+| 溫度 | 排程現有溫度 |
+| 重複 | 排程現有星期 |
+
+**互動**
+
+- 「保存」：驗證同 §5.10.1 → `scheduleStore.updateSchedule(id, patch)` → `router.back()`
+- 「取消」：直接 `router.back()`
+- 「刪除排程」（底部 error 紅色文字按鈕）：Alert 確認「確定要刪除排程嗎？」→ 確認後 `scheduleStore.removeSchedule(id)` → `router.back()`
+- `id` 不存在於 store 時：直接 `router.back()`
+
+---
 
 ### 5.11 配方詳情頁 (Recipe Detail)
 
@@ -687,6 +805,153 @@ App
 
 - 點「保存」或 Bottom CTA → 寫入 Zustand `recipeStore`，返回上一頁
 - 編輯模式下載入既有 `recipe` 預填欄位
+
+### 5.13 個人資料頁 (Profile)
+
+對應 Pencil `82q1j`（AvatarPicker Bottom Sheet `0rUQQ`；Avatar/Large `uRiO0`）/ 程式碼 `app/profile.tsx`。
+
+**用途**：展示與編輯當前使用者的頭像、暱稱、咖啡等級與累積杯數；並提供前往成就頁的入口。
+
+**版面結構**
+
+```
+┌──────────────────────┐
+│ ← 個人資料            │  Nav Bar (44px) — 返回 + 標題
+├──────────────────────┤
+│      ┌────────┐      │
+│      │ 😊     │      │  Avatar (160x160 圓形)
+│      └────────┘      │
+│   [ 更換頭像 ]       │  Ghost button
+│                      │
+│  ── 暱稱 ──────────  │
+│ [Bennett           ] │  TextInput
+│                      │
+│  ── 帳號資訊 ──────  │
+│  ☕ 咖啡等級   高階 → │  Info row (只讀)
+│  📊 累積沖煮   248 杯 │
+│                      │
+│  🏆 查看成就     →    │  Row → /achievements
+│                      │
+└──────────────────────┘
+```
+
+**設計規格**
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 高 44px，左 IconButton (返回) + 中標題 (Cormorant Garamond 20) |
+| Avatar | 160x160，圓形，gold border 2px；預設圖示或 `user.avatarUrl` |
+| 更換頭像 button | Ghost variant，文字 Inter 14 medium gold |
+| 暱稱 TextInput | bg `#2A2A2C`, radius 16px, padding 16px, Inter 16, placeholder `#4A4A4C` |
+| Info Row | SettingsRow 元件，左 icon + 文字 (Inter 14) + 右值 (Inter 14 secondary) |
+| 查看成就 Row | SettingsRow 元件，右箭頭 (ChevronRight) |
+| Section Header | SectionHeader 元件 |
+| 內容 padding | horizontal 28px, section gap 32px |
+
+**互動**
+
+- 暱稱 TextInput `onBlur` → `userStore.updateName(name)`
+  - 空白 trim 後為空 → `Alert.alert("請輸入暱稱")` 且維持舊值
+  - 超過 20 字自動截斷
+- 點頭像或「更換頭像」Ghost 按鈕 → 彈出 AvatarPicker Bottom Sheet（6 個預設頭像）
+  - 選擇後 → `userStore.updateAvatar(avatarUrl)`，頁面即時更新
+- 點「查看成就」Row → `router.push('/achievements')`
+
+**資料來源**
+
+- `useUserStore` → `user`、`updateName`、`updateAvatar`
+- `LEVEL_NAMES` 對應表（`src/constants/theme.ts` 或新建 `user.ts`）
+
+---
+
+### 5.14 家庭成員頁 (Family Members)
+
+對應程式碼 `app/family/index.tsx`（列表）、`app/family/edit.tsx`（新增/編輯）。
+
+**用途**：管理家庭共用咖啡機的所有使用成員（最多 6 人），支援新增、編輯、刪除操作。
+
+**5.14.1 成員列表頁**
+
+版面結構：
+
+```
+┌──────────────────────┐
+│ ← 家庭成員            │  Nav Bar — 返回 + 標題 + [+] IconButton
+├──────────────────────┤
+│ ┌────────────────┐   │
+│ │ 😊 Bennett  本人│   │  MemberCard（當前使用者，無刪除）
+│ │ ☕ 高階  248 杯  │   │
+│ └────────────────┘   │
+│ ┌────────────────┐   │
+│ │ 👩 Alice        │   │  MemberCard（其他成員）
+│ │ ☕ 初學者  12 杯 │   │
+│ └────────────────┘   │
+└──────────────────────┘
+```
+
+設計規格：
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 高 44px，左 IconButton (返回) + 中標題 Cormorant Garamond 20 + 右 `+` IconButton（達 6 人時 disable） |
+| MemberCard | bg `#242426`，radius 20px，padding 16px，border `#3A3A3C` |
+| 頭像 | 56x56 圓形，gold border 2px |
+| 「本人」Pill | bg gold，文字 10px bold，右上角絕對定位 |
+| 暱稱 | Inter 16 semibold，Warm White |
+| 等級 + 杯數 | Inter 12，Text Secondary |
+| 長按選單（非本人） | Alert：「編輯」、「刪除」、「取消」 |
+| 長按選單（本人） | Alert：「編輯」、「取消」 |
+| 空狀態 | 不存在（至少有當前使用者） |
+| 內容 padding | horizontal 28px，卡片 gap 12px |
+
+互動：
+
+- 點 `+` → `router.push('/family/edit')`（新增模式）
+- 長按成員 Card（非本人）→ Alert 選單「編輯 / 刪除 / 取消」
+  - 選「編輯」→ `router.push('/family/edit?userId=<id>')`
+  - 選「刪除」→ 二次確認 Alert，確認後 `userStore.removeMember(id)`
+- 長按本人 Card → Alert「編輯 / 取消」
+- 點 Card 本體 → 同編輯（導至 `/family/edit?userId=<id>`）
+
+**5.14.2 新增/編輯頁**
+
+版面結構：
+
+```
+┌──────────────────────┐
+│ ← 新增成員           │  Nav Bar — 標題依模式切換；右側「保存」Text 按鈕
+├──────────────────────┤
+│      ┌────────┐      │
+│      │ 😊     │      │  Avatar (120x120 圓形) + 點擊換頭像
+│      └────────┘      │
+│   [ 更換頭像 ]       │  Ghost button
+│                      │
+│  ── 暱稱 ──────────  │
+│ [             ]      │  TextInput
+│                      │
+└──────────────────────┘
+```
+
+設計規格：
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 高 44px，左 IconButton (返回) + 中標題；新增→「新增成員」，編輯→「編輯成員」；右 Text 按鈕「保存」(Inter 16 semibold, gold) |
+| Avatar | 120x120，圓形，gold border 2px |
+| 更換頭像 button | Ghost variant，文字 Inter 14 medium gold |
+| 暱稱 TextInput | bg `#2A2A2C`，radius 16px，padding 16px，Inter 16 |
+| 內容 padding | horizontal 28px，section gap 32px |
+
+互動：
+
+- 新增模式（無 `userId` query）：TextInput 空白、頭像預設；「保存」→ `userStore.addMember({ name, avatarUrl })`
+- 編輯模式（有 `userId` query）：TextInput 與頭像預填現有值；「保存」→ `userStore.updateMember(id, { name, avatarUrl })`
+- 名稱空白 trim → Alert 提示，不保存
+- 達 6 人時「保存」顯示 Alert「已達成員上限（6 人）」
+
+**資料來源**
+
+- `useUserStore` → `members`、`currentUserId`、`addMember`、`updateMember`、`removeMember`
 
 ---
 
@@ -932,7 +1197,10 @@ coffee-app/
 │   ├── drink/
 │   │   └── [id].tsx               # 飲品詳情 (Drink Detail)
 │   ├── brew-progress.tsx          # 沖煮進度 (Modal)
-│   ├── schedule.tsx               # 排程管理
+│   ├── schedule/
+│   │   ├── _layout.tsx            # Stack Navigator (modal presentation)
+│   │   ├── index.tsx              # 排程管理列表
+│   │   └── new.tsx                # 新增排程 Modal
 │   ├── achievements.tsx           # 成就與徽章
 │   └── onboarding.tsx             # 引導頁
 │

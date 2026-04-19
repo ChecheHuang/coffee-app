@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, Pressable, Alert } from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { ChevronLeft, Heart, Coffee } from "lucide-react-native";
@@ -324,7 +324,10 @@ export default function DrinkDetailScreen() {
         <Animated.View style={savePress.animatedStyle}>
           <Pressable
             className="items-center py-1"
-            onPress={() => Alert.alert("已保存", "配方已保存成功")}
+            onPress={() => {
+              if (!id) return;
+              router.push(`/recipe/edit?drinkId=${encodeURIComponent(id)}`);
+            }}
             {...savePress.pressHandlers}
           >
             <Text className="font-body-medium text-sm text-gold">

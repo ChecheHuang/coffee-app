@@ -96,13 +96,13 @@ export default function SettingsScreen() {
             <SettingsRow
               icon={<User size={18} color="#C9A962" strokeWidth={1.5} />}
               label="Bennett"
-              onPress={() => Alert.alert("個人資料", "個人資料頁面即將推出")}
+              onPress={() => router.push("/profile")}
             />
             <SettingsRow
               icon={<Users size={18} color="#6E6E70" strokeWidth={1.5} />}
               label="家庭成員管理"
               isLast
-              onPress={() => Alert.alert("家庭成員", "家庭成員管理即將推出")}
+              onPress={() => router.push("/family")}
             />
           </SettingsSection>
 

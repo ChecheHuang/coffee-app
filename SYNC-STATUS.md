@@ -1,23 +1,27 @@
 # Sync Status
 
-> Init: 2026-04-19 | Last update: 2026-04-19 (Skill 系統重整完成：新 7-skill 工作流 explore→propose→apply→archive + pencil-draw + three-way-check + sync-status；舊 7 skill 已刪)
+> Init: 2026-04-19 | Last update: 2026-04-19 (apply add-schedule-edit 全完成：PRD §5.10.2 + Pencil stB82 + edit.tsx + _layout + index 移除 Alert)
 
 ## Pages
 
 | Item | PRD | Pencil | Code | 最後驗證 | 錨點 | 備註 |
 |------|-----|--------|------|----------|------|------|
 | Home | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.1](PRD.md) | n8paz / app/(tabs)/index.tsx |
-| Drinks | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.2](PRD.md) | tqxm1 / app/(tabs)/drinks.tsx |
-| drink/[id] | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.3](PRD.md) | k3cwl / app/drink/[id].tsx |
+| Drinks | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.2](PRD.md) | tqxm1 / hvmWi / app/(tabs)/drinks.tsx（含 search 子狀態）|
+| drink/[id] | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.3](PRD.md) | k3cwl / app/drink/[id].tsx（保存按鈕已接 recipe/edit）|
 | Brew Progress | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.4](PRD.md) | YzpCG / app/brew-progress.tsx |
 | Recipes | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.5](PRD.md) | EXtUo / app/(tabs)/recipes.tsx |
 | Stats | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.6](PRD.md) | eXyCa / app/(tabs)/stats.tsx |
 | Achievements | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.7](PRD.md) | hFXph / app/achievements.tsx |
-| Settings | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.8](PRD.md) | Lun15 / app/(tabs)/settings.tsx |
+| Settings | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.8](PRD.md) | app/(tabs)/settings.tsx 家庭成員管理列 → /family |
+| Profile | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.13](PRD.md) | 82q1j / app/profile.tsx |
+| Family Members | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.14](PRD.md) | IUr5z/LrpQy / app/family/index.tsx + edit.tsx |
 | Onboarding | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.9](PRD.md) | Code 已拆 4 檔對齊 Pencil 7cvXQ/hCVEB/l7CVp/suJ8Y |
-| Schedule | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.10](PRD.md) | PRD §5.10 已補 Schedule 頁規格 |
+| Schedule | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.10](PRD.md) | app/schedule/index.tsx；card 點擊已接 /schedule/edit |
+| Schedule/New | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.10.1](PRD.md) | Pencil 4QddG；app/schedule/new.tsx；_layout modal presentation |
+| Schedule/Edit | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.10.2](PRD.md) | Pencil stB82；app/schedule/edit.tsx；預填 + updateSchedule + removeSchedule |
 | recipe/[id] | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.11](PRD.md) | PRD §5.11 已補 Recipe Detail 規格 |
-| Recipe Edit | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.12](PRD.md) | PRD §5.12 已補 Recipe Edit 規格 |
+| Recipe Edit | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.12](PRD.md) | PRD §5.12 已補 Recipe Edit 規格；支援 `?drinkId=` 預填模式 |
 
 ## Components
 
@@ -34,7 +38,9 @@
 | Pill | ⚠ | ✓ | ⚠ | 2026-04-19 | Cxr82 / c1lrg | PRD 缺獨立規格, Pencil 有 Active/Inactive |
 | ProgressBar | ⚠ | ✓ | ⚠ | 2026-04-19 | fCzqT | PRD 缺獨立規格 |
 | Badge | ⚠ | ✓ | ⚠ | 2026-04-19 | GCkLw | PRD 缺獨立規格 |
-| Avatar | ⚠ | ✓ | ⚠ | 2026-04-19 | PHoUG | PRD 缺獨立規格 |
+| Avatar | ⚠ | ✓ | ⚠ | 2026-04-19 | PHoUG / uRiO0 | PRD 缺獨立規格；Pencil 含 44 與 Large 160x160 兩變體 |
+| AvatarPicker | ✓ | ✓ | ✓ | 2026-04-19 | 0rUQQ | components/AvatarPicker.tsx（Modal + 6 預設頭像 Grid） |
+| MemberCard | ✓ | ✓ | ✓ | 2026-04-19 | wLpnz | components/MemberCard.tsx |
 | IconButton | ⚠ | ✓ | ⚠ | 2026-04-19 | ZLuh7 | PRD 缺獨立規格 |
 | SettingsRow | ⚠ | ✓ | ⚠ | 2026-04-19 | Y0c8g | PRD 缺獨立規格 |
 | SectionHeader | ⚠ | ✓ | ⚠ | 2026-04-19 | l4DO6 | PRD 缺獨立規格 |
