@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -25,21 +25,29 @@ export default function EditScheduleScreen() {
 
   const schedule = schedules.find((s) => s.id === id);
 
-  if (!schedule) {
-    router.back();
-    return null;
-  }
+  // All hooks must be called before any conditional return (Rules of Hooks)
+  const initialLabelIndices = schedule
+    ? schedule.days
+        .map((day) => LABEL_TO_DAY.indexOf(day as (typeof LABEL_TO_DAY)[number]))
+        .filter((i) => i !== -1)
+    : [];
 
-  const initialLabelIndices = schedule.days
-    .map((day) => LABEL_TO_DAY.indexOf(day as (typeof LABEL_TO_DAY)[number]))
-    .filter((i) => i !== -1);
-
-  const [name, setName] = useState(schedule.name);
-  const [hour, setHour] = useState(() => parseInt(schedule.time.split(":")[0], 10));
-  const [minute, setMinute] = useState(() => parseInt(schedule.time.split(":")[1], 10));
-  const [drinkId, setDrinkId] = useState(schedule.drinkId);
-  const [temperature, setTemperature] = useState(schedule.temperature ?? 92);
+  const [name, setName] = useState(() => schedule?.name ?? "");
+  const [hour, setHour] = useState(() => (schedule ? parseInt(schedule.time.split(":")[0], 10) : 8));
+  const [minute, setMinute] = useState(() => (schedule ? parseInt(schedule.time.split(":")[1], 10) : 0));
+  const [drinkId, setDrinkId] = useState(() => schedule?.drinkId ?? "");
+  const [temperature, setTemperature] = useState(() => schedule?.temperature ?? 92);
   const [activeLabelIndices, setActiveLabelIndices] = useState<number[]>(initialLabelIndices);
+
+  // Handle navigating to edit screen with an invalid/missing id (mount-only check)
+  useEffect(() => {
+    if (!schedule) {
+      router.back();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!schedule) return null;
 
   const toggleDay = (labelIndex: number) =>
     setActiveLabelIndices((prev) =>
