@@ -8,4 +8,8 @@ export interface MachineState {
   readonly descaleStatus: "ok" | "needed" | "overdue";
   readonly firmwareVersion: string;
   readonly isLatestFirmware: boolean;
+  readonly model: string;
+  readonly serialNumber: string;
+  readonly purchaseDate: number;
+  readonly warrantyEndDate: number;
 }

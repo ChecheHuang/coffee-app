@@ -350,7 +350,7 @@
                   "width": "fill_container",
                   "height": "fill_container",
                   "name": "t1",
-                  "x": 4.000000000000028,
+                  "x": 4.000000000000014,
                   "y": 4,
                   "descendants": {
                     "FEmMw": {
@@ -370,7 +370,7 @@
                   "width": "fill_container",
                   "height": "fill_container",
                   "name": "t2",
-                  "x": 74.40000000000003,
+                  "x": 74.40000000000002,
                   "y": 4,
                   "descendants": {
                     "V8C0X": {
@@ -1887,10 +1887,10 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028
+              "x": 4.000000000000014
             },
             "kjGH4": {
-              "x": 74.40000000000003
+              "x": 74.40000000000002
             }
           }
         }
@@ -2645,7 +2645,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -2655,7 +2655,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#C9A962"
             },
             "kjGH4/V8C0X": {
@@ -4652,7 +4652,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -4662,7 +4662,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#00000000"
             },
             "kjGH4/V8C0X": {
@@ -5692,7 +5692,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -5702,7 +5702,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#00000000"
             },
             "kjGH4/V8C0X": {
@@ -5973,23 +5973,24 @@
                       "y": 0,
                       "descendants": {
                         "KyAKi": {
-                          "y": 18.5,
-                          "iconFontName": "radio"
+                          "y": 19,
+                          "iconFontName": "info"
                         },
                         "jv2ui": {
                           "width": "fill_container",
-                          "y": 19,
-                          "content": "BrewMaster Pro"
+                          "y": 18,
+                          "content": "咖啡機資訊"
                         },
                         "ouCvG": {
                           "x": 258,
                           "y": 18,
                           "content": "已連線",
-                          "fill": "#6E9E6E"
+                          "fill": "#6E9E6E",
+                          "enabled": false
                         },
                         "45JiD": {
                           "x": 310,
-                          "y": 19.5
+                          "y": 20
                         }
                       }
                     },
@@ -6008,7 +6009,7 @@
                       "name": "r4",
                       "height": "fit_content",
                       "x": 0,
-                      "y": 56,
+                      "y": 57,
                       "descendants": {
                         "KyAKi": {
                           "y": 19,
@@ -6022,44 +6023,6 @@
                         "ouCvG": {
                           "x": 298,
                           "y": 20
-                        },
-                        "45JiD": {
-                          "x": 310,
-                          "y": 20
-                        }
-                      }
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "uOwZu",
-                      "fill": "#2A2A2C",
-                      "width": "fill_container",
-                      "height": 1
-                    },
-                    {
-                      "id": "Ptki7",
-                      "type": "ref",
-                      "ref": "Y0c8g",
-                      "width": "fill_container",
-                      "name": "r5",
-                      "height": "fit_content",
-                      "x": 0,
-                      "y": 113,
-                      "descendants": {
-                        "KyAKi": {
-                          "y": 19,
-                          "iconFontName": "refresh-cw"
-                        },
-                        "jv2ui": {
-                          "width": "fill_container",
-                          "y": 18,
-                          "content": "韌體更新"
-                        },
-                        "ouCvG": {
-                          "x": 243,
-                          "y": 18.5,
-                          "content": "最新版 ✓",
-                          "fill": "#6E9E6E"
                         },
                         "45JiD": {
                           "x": 310,
@@ -6400,7 +6363,7 @@
           "y": 779,
           "descendants": {
             "w644v": {
-              "x": 4.000000000000028,
+              "x": 4.000000000000014,
               "fill": "#00000000"
             },
             "w644v/FEmMw": {
@@ -6410,7 +6373,7 @@
               "fill": "#6E6E70"
             },
             "kjGH4": {
-              "x": 74.40000000000003,
+              "x": 74.40000000000002,
               "fill": "#00000000"
             },
             "kjGH4/V8C0X": {
@@ -10740,7 +10703,7 @@
           "descendants": {
             "w644v": {
               "fill": "#00000000",
-              "x": 4.000000000000014
+              "x": 4.000000000000028
             },
             "w644v/FEmMw": {
               "fill": "#6E6E70"
@@ -10750,7 +10713,7 @@
             },
             "kjGH4": {
               "fill": "#C9A962",
-              "x": 74.40000000000002
+              "x": 74.40000000000003
             },
             "kjGH4/V8C0X": {
               "fill": "#1A1A1C"
@@ -12094,7 +12057,8 @@
               "fill": "#6E6E70",
               "content": "取消",
               "fontFamily": "Inter",
-              "fontSize": 16
+              "fontSize": 16,
+              "fontWeight": "normal"
             },
             {
               "type": "text",
@@ -12166,7 +12130,8 @@
                       "fill": "#4A4A4C",
                       "content": "例：晨間 Latte",
                       "fontFamily": "Inter",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -12699,7 +12664,8 @@
               "fill": "#6E6E70",
               "content": "取消",
               "fontFamily": "Inter",
-              "fontSize": 16
+              "fontSize": 16,
+              "fontWeight": "normal"
             },
             {
               "type": "text",
@@ -12771,7 +12737,8 @@
                       "fill": "#4A4A4C",
                       "content": "例：晨間 Latte",
                       "fontFamily": "Inter",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -13222,6 +13189,722 @@
               "fontWeight": "500"
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "TVCk0",
+      "x": 10442,
+      "y": 200,
+      "name": "Screen - MachineInfo",
+      "clip": true,
+      "width": 402,
+      "height": 874,
+      "fill": "#1A1A1C",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "JrNiN",
+          "name": "statusBar",
+          "width": "fill_container",
+          "height": 62,
+          "padding": [
+            0,
+            28
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "6TWsN",
+              "fill": "#F5F5F0",
+              "content": "9:41",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "gxhhv",
+              "name": "s7sr",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "SdKVD",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "signal",
+                  "iconFontFamily": "lucide",
+                  "fill": "#F5F5F0"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "CL0XH",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "wifi",
+                  "iconFontFamily": "lucide",
+                  "fill": "#F5F5F0"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "5JC1o",
+                  "width": 18,
+                  "height": 14,
+                  "iconFontName": "battery-full",
+                  "iconFontFamily": "lucide",
+                  "fill": "#F5F5F0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lkJlk",
+          "name": "mainContent",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            16,
+            28,
+            0,
+            28
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "U6Mbl",
+              "name": "navBar",
+              "width": "fill_container",
+              "height": 44,
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "283ih",
+                  "type": "ref",
+                  "ref": "ZLuh7",
+                  "name": "backBtn",
+                  "descendants": {
+                    "imOOG": {
+                      "iconFontName": "chevron-left",
+                      "fill": "#F5F5F0"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "5CF9q",
+                  "name": "navTitle",
+                  "fill": "#F5F5F0",
+                  "content": "咖啡機資訊",
+                  "fontFamily": "Cormorant Garamond",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "7MBgr",
+                  "name": "navSpacer",
+                  "width": 44,
+                  "height": 44,
+                  "fill": "#00000000"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "oEDTP",
+              "name": "heroSection",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                16,
+                0,
+                8,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "VFGqL",
+                  "name": "heroIcon",
+                  "width": 80,
+                  "height": 80,
+                  "iconFontName": "coffee",
+                  "iconFontFamily": "lucide",
+                  "fill": "#C9A962"
+                },
+                {
+                  "type": "text",
+                  "id": "oMmDt",
+                  "name": "heroTitle",
+                  "fill": "#F5F5F0",
+                  "content": "BrewMaster Pro X1",
+                  "fontFamily": "Cormorant Garamond",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "stMdq",
+              "name": "basicSection",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "aKbM2",
+                  "name": "basicHeader",
+                  "fill": "#6E6E70",
+                  "content": "基本資訊",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 3
+                },
+                {
+                  "type": "frame",
+                  "id": "dyhiO",
+                  "name": "basicCard",
+                  "width": "fill_container",
+                  "fill": "#242426",
+                  "cornerRadius": 20,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#3A3A3C"
+                  },
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "id": "OQptv",
+                      "type": "ref",
+                      "ref": "Y0c8g",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "name": "modelRow",
+                      "descendants": {
+                        "KyAKi": {
+                          "enabled": false
+                        },
+                        "jv2ui": {
+                          "content": "型號",
+                          "fill": "#6E6E70"
+                        },
+                        "ouCvG": {
+                          "content": "BrewMaster Pro X1",
+                          "fill": "#F5F5F0"
+                        },
+                        "45JiD": {
+                          "enabled": false
+                        }
+                      }
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "RrrdY",
+                      "name": "basicDiv1",
+                      "fill": "#2A2A2C",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "umeCn",
+                      "name": "serialRow",
+                      "width": "fill_container",
+                      "height": 44,
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Kh0Pw",
+                          "name": "serialLabel",
+                          "fill": "#6E6E70",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "序號",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ydWcM",
+                          "name": "serialValueGroup",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "6m3F0",
+                              "name": "serialValue",
+                              "fill": "#F5F5F0",
+                              "content": "SN-20250815-ABCD",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "icon_font",
+                              "id": "6UYRc",
+                              "name": "serialCopyIcon",
+                              "width": 14,
+                              "height": 14,
+                              "iconFontName": "copy",
+                              "iconFontFamily": "lucide",
+                              "fill": "#C9A962"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "NLS5h",
+                      "name": "basicDiv2",
+                      "fill": "#2A2A2C",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "id": "CvTJV",
+                      "type": "ref",
+                      "ref": "Y0c8g",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "name": "purchaseRow",
+                      "descendants": {
+                        "KyAKi": {
+                          "enabled": false
+                        },
+                        "jv2ui": {
+                          "content": "購買日",
+                          "fill": "#6E6E70"
+                        },
+                        "ouCvG": {
+                          "content": "2025-08-15",
+                          "fill": "#F5F5F0"
+                        },
+                        "45JiD": {
+                          "enabled": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mr0Yu",
+              "name": "connSection",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xMpTz",
+                  "name": "connHeader",
+                  "fill": "#6E6E70",
+                  "content": "連線狀態",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 3
+                },
+                {
+                  "type": "frame",
+                  "id": "wq02H",
+                  "name": "connCard",
+                  "width": "fill_container",
+                  "fill": "#242426",
+                  "cornerRadius": 20,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#3A3A3C"
+                  },
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "92vxy",
+                      "name": "connRow",
+                      "width": "fill_container",
+                      "height": 44,
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "1ivGO",
+                          "name": "connLabel",
+                          "fill": "#6E6E70",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "連線類型",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "XHN1F",
+                          "name": "connValueGroup",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "1wax8",
+                              "name": "connValueText",
+                              "fill": "#F5F5F0",
+                              "content": "WiFi",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "NaBZ0",
+                              "name": "connStatusDot",
+                              "fill": "#6E9E6E",
+                              "width": 8,
+                              "height": 8
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5IZyI",
+              "name": "firmSection",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "oyrLF",
+                  "name": "firmHeader",
+                  "fill": "#6E6E70",
+                  "content": "韌體",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 3
+                },
+                {
+                  "type": "frame",
+                  "id": "gjxiV",
+                  "name": "firmCard",
+                  "width": "fill_container",
+                  "fill": "#242426",
+                  "cornerRadius": 20,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#3A3A3C"
+                  },
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "0ISZ9",
+                      "name": "versionRow",
+                      "width": "fill_container",
+                      "height": 44,
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Sq8kY",
+                          "name": "versionLabel",
+                          "fill": "#6E6E70",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "版本",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "IbnJ8",
+                          "name": "versionValueGroup",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "mLOQu",
+                              "name": "versionText",
+                              "fill": "#F5F5F0",
+                              "content": "v2.3.1",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "BlmZb",
+                              "name": "versionPill",
+                              "fill": "#6E9E6E",
+                              "cornerRadius": 34,
+                              "padding": [
+                                2,
+                                8
+                              ],
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "OYGaV",
+                                  "name": "versionPillText",
+                                  "fill": "#FFFFFF",
+                                  "content": "最新版 ✓",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 10,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "zsTRg",
+                      "type": "ref",
+                      "ref": "K9ngK",
+                      "width": "fill_container",
+                      "name": "checkUpdateBtn",
+                      "descendants": {
+                        "UzOyr": {
+                          "content": "檢查更新"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "avdMS",
+              "name": "warrantySection",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K3SnD",
+                  "name": "warrantyHeader",
+                  "fill": "#6E6E70",
+                  "content": "保固",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 3
+                },
+                {
+                  "type": "frame",
+                  "id": "AEkbu",
+                  "name": "warrantyCard",
+                  "width": "fill_container",
+                  "fill": "#242426",
+                  "cornerRadius": 20,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#3A3A3C"
+                  },
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "id": "fUQuW",
+                      "type": "ref",
+                      "ref": "Y0c8g",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "name": "expiryRow",
+                      "descendants": {
+                        "KyAKi": {
+                          "enabled": false
+                        },
+                        "jv2ui": {
+                          "content": "到期日",
+                          "fill": "#6E6E70"
+                        },
+                        "ouCvG": {
+                          "content": "2026-08-15",
+                          "fill": "#F5F5F0"
+                        },
+                        "45JiD": {
+                          "enabled": false
+                        }
+                      }
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "qrXYC",
+                      "name": "warrantyDiv",
+                      "fill": "#2A2A2C",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fznFl",
+                      "name": "statusRow",
+                      "width": "fill_container",
+                      "height": 44,
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Zj2aZ",
+                          "name": "statusLabel",
+                          "fill": "#6E6E70",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "狀態",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "1OFjT",
+                          "name": "statusPill",
+                          "fill": "#6E9E6E",
+                          "cornerRadius": 34,
+                          "padding": [
+                            2,
+                            8
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "LAgEJ",
+                              "name": "statusPillText",
+                              "fill": "#FFFFFF",
+                              "content": "有效",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5Yoom",
+          "type": "ref",
+          "ref": "xVrMI",
+          "width": "fill_container",
+          "name": "tabBar",
+          "x": 0,
+          "y": 779,
+          "descendants": {
+            "w644v": {
+              "x": 4.000000000000014,
+              "fill": "#00000000"
+            },
+            "w644v/FEmMw": {
+              "fill": "#6E6E70"
+            },
+            "w644v/c1Ue0": {
+              "fill": "#6E6E70"
+            },
+            "kjGH4": {
+              "x": 74.40000000000002,
+              "fill": "#00000000"
+            },
+            "kjGH4/V8C0X": {
+              "fill": "#6E6E70"
+            },
+            "kjGH4/AMcrN": {
+              "fill": "#6E6E70"
+            },
+            "SuCNb": {
+              "fill": "#00000000"
+            },
+            "SuCNb/V8C0X": {
+              "fill": "#6E6E70"
+            },
+            "SuCNb/AMcrN": {
+              "fill": "#6E6E70"
+            },
+            "37UGB": {
+              "fill": "#00000000"
+            },
+            "37UGB/V8C0X": {
+              "fill": "#6E6E70"
+            },
+            "37UGB/AMcrN": {
+              "fill": "#6E6E70"
+            },
+            "z4vIk": {
+              "fill": "#C9A962"
+            },
+            "z4vIk/V8C0X": {
+              "fill": "#1A1A1C"
+            },
+            "z4vIk/AMcrN": {
+              "fill": "#1A1A1C"
+            }
+          }
         }
       ]
     }

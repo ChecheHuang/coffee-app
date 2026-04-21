@@ -208,8 +208,8 @@ App
 │   │   └── 家庭成員管理
 │   ├── 咖啡機管理
 │   │   ├── 配對設定
-│   │   ├── WiFi 設定
-│   │   └── 韌體更新
+│   │   ├── 咖啡機資訊 → /machine-info
+│   │   └── WiFi 設定
 │   ├── 排程管理
 │   │   ├── 排程列表
 │   │   └── 新增/編輯排程
@@ -521,9 +521,8 @@ Drinks 頁右上角 Search IconButton 觸發 inline 搜尋，不跳頁。
 │                                     │
 │  ── 咖啡機 ──────────────────────  │
 │  ┌─────────────────────────────┐   │
-│  │ 📡 BrewMaster Pro     已連線 │   │
+│  │ ℹ️ 咖啡機資訊           →     │   │
 │  │ 📶 WiFi 設定           →     │   │
-│  │ 🔄 韌體更新       最新版 ✓   │   │
 │  └─────────────────────────────┘   │
 │                                     │
 │  ── 排程 ────────────────────────  │
@@ -952,6 +951,80 @@ Drinks 頁右上角 Search IconButton 觸發 inline 搜尋，不跳頁。
 **資料來源**
 
 - `useUserStore` → `members`、`currentUserId`、`addMember`、`updateMember`、`removeMember`
+
+---
+
+### 5.15 咖啡機資訊 (Machine Info)
+
+對應 Pencil `（待建）` / 程式碼 `app/machine-info.tsx`。
+
+**用途**：集中呈現咖啡機 identity 資訊（型號、序號、連線、韌體、保固），方便報修查詢序號、確認韌體版本及保固狀態。
+
+**版面結構**
+
+```
+┌──────────────────────┐
+│ ← 咖啡機資訊          │  Nav Bar (44px)
+├──────────────────────┤
+│                      │
+│       ☕              │  Hero icon（Coffee，80x80，gold）
+│  BrewMaster Pro X1   │  型號名稱（Cormorant Garamond 24）
+│                      │
+│  ── 基本資訊 ───────  │
+│  型號    BrewMaster Pro X1   │
+│  序號    SN-20250815-ABCD  📋 │  複製 icon
+│  購買日  2025-08-15          │
+│                      │
+│  ── 連線狀態 ──────  │
+│  連線類型   WiFi  ●   │  狀態點 success/warning/error
+│                      │
+│  ── 韌體 ──────────  │
+│  版本    v2.3.1  [最新版 ✓]  │  success pill
+│  [檢查更新]          │  Ghost button
+│                      │
+│  ── 保固 ──────────  │
+│  到期日  2026-08-15          │
+│  狀態    [有效]       │  success pill
+│                      │
+└──────────────────────┘
+```
+
+**設計規格**
+
+| 元素 | 規格 |
+|------|------|
+| Nav Bar | 高 44px，左 IconButton (返回) + 中標題 (Cormorant Garamond 20) |
+| Hero icon | Coffee icon，size 80，gold，居中，marginBottom 8 |
+| 型號名稱 | Cormorant Garamond 24px，text-primary，居中 |
+| Section Header | Inter 11px medium uppercase，letterSpacing 3，text-secondary |
+| Info Row | 高 44px，左 label (Inter 14 secondary)，右 value (Inter 14 primary)，行間分隔 1px `#2A2A2C` |
+| 複製 icon | Copy icon，size 14，gold，序號值右側 |
+| 韌體 pill（最新版）| bg `#6E9E6E`，文字 10px bold，白色 |
+| 韌體 pill（可更新）| bg `#FF9800`，文字 10px bold，白色 |
+| 保固 pill（有效）| bg `#6E9E6E`，文字 10px bold，白色 |
+| 保固 pill（已過期）| bg `#FF9800`，文字 10px bold，白色 |
+| 「檢查更新」button | Ghost variant，marginTop 8 |
+| 內容 padding | horizontal 28px，section gap 32px |
+
+**互動**
+
+- 點複製 icon → `Clipboard.setStringAsync(serialNumber)` → Toast「序號已複製」
+- 點「檢查更新」→ Toast「檢查中…」→ 1.5 秒後 Toast「已是最新版本」（若 `isLatestFirmware`）或「發現新版本 v2.3.2」
+
+**型別擴充**
+
+`src/types/machine.ts` 的 `MachineState` 新增 readonly 欄位：
+
+| 欄位 | 型別 | 說明 |
+|------|------|------|
+| `model` | `string` | 型號名稱，例：`"BrewMaster Pro X1"` |
+| `serialNumber` | `string` | 序號，例：`"SN-20250815-ABCD"` |
+| `purchaseDate` | `number` | 購買日期（ms epoch） |
+| `warrantyEndDate` | `number` | 保固到期日（ms epoch） |
+
+**資料來源**
+
+- `useMachineStore` → `MachineState`（含上述新欄位）
 
 ---
 

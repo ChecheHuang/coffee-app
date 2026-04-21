@@ -6,9 +6,8 @@ import {
   User,
   Users,
   Clock,
-  Coffee,
+  Info,
   Wifi,
-  RefreshCw,
   Wrench,
   Droplets,
   Package,
@@ -109,39 +108,15 @@ export default function SettingsScreen() {
           {/* 咖啡機 */}
           <SettingsSection title="咖啡機" index={1}>
             <SettingsRow
-              icon={<Coffee size={18} color="#C9A962" strokeWidth={1.5} />}
-              label="BrewMaster Pro"
-              badge={
-                <View
-                  className="rounded-pill"
-                  style={{
-                    backgroundColor: "#6E9E6E",
-                    paddingHorizontal: 8,
-                    paddingVertical: 2,
-                  }}
-                >
-                  <Text className="font-body-medium text-[10px] text-bg-primary">
-                    已連線
-                  </Text>
-                </View>
-              }
-              onPress={() => Alert.alert("咖啡機資訊", "咖啡機詳細資訊即將推出")}
+              icon={<Info size={18} color="#C9A962" strokeWidth={1.5} />}
+              label="咖啡機資訊"
+              onPress={() => router.push("/machine-info")}
             />
             <SettingsRow
               icon={<Wifi size={18} color="#6E6E70" strokeWidth={1.5} />}
               label="WiFi 設定"
-              onPress={() => Alert.alert("WiFi 設定", "WiFi 設定頁面即將推出")}
-            />
-            <SettingsRow
-              icon={<RefreshCw size={18} color="#6E6E70" strokeWidth={1.5} />}
-              label="韌體更新"
-              badge={
-                <Text className="font-body-medium text-[10px] text-gold">
-                  最新版 ✓
-                </Text>
-              }
               isLast
-              onPress={() => Alert.alert("韌體更新", "已是最新版本")}
+              onPress={() => Alert.alert("WiFi 設定", "WiFi 設定頁面即將推出")}
             />
           </SettingsSection>
 

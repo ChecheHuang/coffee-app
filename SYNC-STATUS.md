@@ -1,6 +1,6 @@
 # Sync Status
 
-> Init: 2026-04-19 | Last update: 2026-04-19 (apply add-schedule-edit 全完成：PRD §5.10.2 + Pencil stB82 + edit.tsx + _layout + index 移除 Alert)
+> Init: 2026-04-19 | Last update: 2026-04-21 (apply add-machine-info Phase B：Pencil Settings 更新 + MachineInfo TVCk0 新增)
 
 ## Pages
 
@@ -13,7 +13,8 @@
 | Recipes | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.5](PRD.md) | EXtUo / app/(tabs)/recipes.tsx |
 | Stats | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.6](PRD.md) | eXyCa / app/(tabs)/stats.tsx |
 | Achievements | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.7](PRD.md) | hFXph / app/achievements.tsx |
-| Settings | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.8](PRD.md) | app/(tabs)/settings.tsx 家庭成員管理列 → /family |
+| Settings | ✓ | ✓ | ✗ | 2026-04-21 | [PRD §5.8](PRD.md) | [change: add-machine-info] PRD §5.8 移除韌體更新列，咖啡機資訊改為導航 /machine-info |
+| MachineInfo | ✓ | ✓ | ✗ | 2026-04-21 | [PRD §5.15](PRD.md) | [change: add-machine-info] 新增咖啡機資訊頁 §5.15；Pencil TVCk0 |
 | Profile | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.13](PRD.md) | 82q1j / app/profile.tsx |
 | Family Members | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.14](PRD.md) | IUr5z/LrpQy / app/family/index.tsx + edit.tsx |
 | Onboarding | ✓ | ✓ | ✓ | 2026-04-19 | [PRD §5.9](PRD.md) | Code 已拆 4 檔對齊 Pencil 7cvXQ/hCVEB/l7CVp/suJ8Y |
